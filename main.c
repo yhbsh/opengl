@@ -6,7 +6,7 @@
 int main() {
   glfwInit();
 
-  GLFWwindow *w = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
+  GLFWwindow *w = glfwCreateWindow(800, 600, "Hello World", glfwGetPrimaryMonitor(), NULL);
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
