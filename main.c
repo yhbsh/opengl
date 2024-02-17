@@ -5,30 +5,27 @@
 
 int main() {
   glfwInit();
-  GLFWwindow *w = glfwCreateWindow(800, 600, "Hello World", glfwGetPrimaryMonitor(), NULL);
-
+  GLFWwindow *w = glfwCreateWindow(600, 600, "w", glfwGetPrimaryMonitor(), NULL);
   glfwMakeContextCurrent(w);
 
-  printf("version: %s\n", glGetString(GL_VERSION));
+  float pos[6] = {-0.5f, -0.5f, 0.0f, 0.5f, 0.5f, -0.5f};
+
+  GLuint buff;
+  glGenBuffers(1, &buff);
+  glBindBuffer(GL_ARRAY_BUFFER, buff);
+  glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), pos, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
   while (!glfwWindowShouldClose(w)) {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glBegin(GL_TRIANGLES);
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(-0.5f, -0.5f);
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex2f(0.5f, -0.5f);
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex2f(0.0f, 0.5f);
-    glEnd();
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     glfwSwapBuffers(w);
     glfwPollEvents();
   }
-
-  glfwDestroyWindow(w);
-  glfwTerminate();
 
   return 0;
 }
