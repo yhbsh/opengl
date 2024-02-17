@@ -5,21 +5,13 @@
 
 int main() {
   glfwInit();
-
   GLFWwindow *w = glfwCreateWindow(800, 600, "Hello World", glfwGetPrimaryMonitor(), NULL);
 
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
   glfwMakeContextCurrent(w);
-  glfwSwapInterval(1);
 
-  const GLubyte *version = glGetString(GL_VERSION);
-  printf("version: %s\n", version);
+  printf("version: %s\n", glGetString(GL_VERSION));
 
   while (!glfwWindowShouldClose(w)) {
-    glClearColor(0.1f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glBegin(GL_TRIANGLES);
