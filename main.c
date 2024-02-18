@@ -72,7 +72,7 @@ int main(void) {
   const char *fs = "#version 120\n"
                    "\n"
                    "void main() {\n"
-                   "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red color with full opacity\n"
+                   "  gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0); // Red color with full opacity\n"
                    "}\n";
 
   unsigned int shader = create_shader(vs, fs);
