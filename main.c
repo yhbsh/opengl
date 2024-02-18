@@ -9,9 +9,6 @@ static unsigned int compile_shader(unsigned int type, const char *source) {
   glShaderSource(id, 1, &source, NULL);
   glCompileShader(id);
 
-  int res;
-  glGetShaderiv(id, GL_COMPILE_STATUS, &res);
-
   return id;
 }
 
