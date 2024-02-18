@@ -1,4 +1,2 @@
-run: main
-	./main
 main: main.c
-	cc main.c -o main -framework opengl -lglfw
+	cc -O3 main.c -o main -framework opengl -framework cocoa -framework iokit -lglfw3
