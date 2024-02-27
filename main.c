@@ -23,21 +23,6 @@ static unsigned int compile_shader(unsigned int type, const char *source) {
   glShaderSource(id, 1, &source, NULL);
   glCompileShader(id);
 
-  int res;
-  glGetShaderiv(id, GL_COMPILE_STATUS, &res);
-
-  if (res == GL_FALSE) {
-    int len;
-    glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
-    char *message = (char *)alloca(len * sizeof(char));
-    glGetShaderInfoLog(id, len, &len, message);
-    const char *vt = type == GL_VERTEX_SHADER ? "vertex" : "fragment";
-    fprintf(stderr, "[ERROR]: could not compile %s shader: %s\n", vt, message);
-    glDeleteShader(id);
-
-    return 0;
-  }
-
   return id;
 }
 
