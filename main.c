@@ -4,6 +4,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const char *read_file(const char *file_name) {
+  FILE *f = fopen(file_name, "rb");
+  fseek(f, 0, SEEK_END);
+  size_t fsize = ftell(f);
+  fseek(f, 0, SEEK_SET);
+  char *buff = malloc(fsize + 1);
+  fread(buff, fsize, 1, f);
+
+  buff[fsize] = '\0';
+  fclose(f);
+
+  return buff;
+}
+
 static unsigned int compile_shader(unsigned int type, const char *source) {
   unsigned int id = glCreateShader(type);
   glShaderSource(id, 1, &source, NULL);
@@ -62,18 +76,8 @@ int main(void) {
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
-  const char *vs = "#version 120\n"
-                   "attribute vec4 position;\n"
-                   "\n"
-                   "void main() {\n"
-                   "  gl_Position = position;\n"
-                   "}\n";
-
-  const char *fs = "#version 120\n"
-                   "\n"
-                   "void main() {\n"
-                   "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red color with full opacity\n"
-                   "}\n";
+  const char *vs = read_file("main.vert");
+  const char *fs = read_file("main.frag");
 
   unsigned int shader = create_shader(vs, fs);
 
