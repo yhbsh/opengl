@@ -99,7 +99,7 @@ int main(void)
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    float rotation_angle = (float)glfwGetTime() * 0.5f;
+    float rotation_angle = (float)glfwGetTime() * 12.0f;
     glUniform1f(rotation_loc, rotation_angle);
 
     glBindVertexArray(vao);
