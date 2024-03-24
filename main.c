@@ -80,30 +80,22 @@ int main(void) {
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
 
-  float points[] = {0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f};
+  float points[12] = {
+      -0.5f, -0.5f, 0.0f, // Bottom-left
+      0.5f,  -0.5f, 0.0f, // Bottom-right
+      0.5f,  0.5f,  0.0f, // Top-right
+      -0.5f, 0.5f,  0.0f  // Top-left
+  };
   GLuint vbo = 0;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
 
   GLuint vao = 0;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-  float points1[] = {-0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.0f, 0.0f, -0.5f, 0.0f};
-  GLuint vbo1 = 0;
-  glGenBuffers(1, &vbo1);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo1);
-  glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points1, GL_STATIC_DRAW);
-
-  GLuint vao1 = 0;
-  glGenVertexArrays(1, &vao1);
-  glBindVertexArray(vao1);
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo1);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
   const char *vertex_shader = "#version 400\n"
@@ -130,17 +122,14 @@ int main(void) {
   glAttachShader(program, fs);
   glAttachShader(program, vs);
   glLinkProgram(program);
+  glUseProgram(program);
 
   while (!glfwWindowShouldClose(w)) {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(program);
 
     glBindVertexArray(vao);
-    glDrawArrays(GL_POINTS, 0, 3);
-
-    glBindVertexArray(vao1);
-    glDrawArrays(GL_POINTS, 0, 3);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
     glfwPollEvents();
     glfwSwapBuffers(w);
