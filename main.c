@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char *read_file(const char *file_name) {
+const char *read_file(const char *file_name)
+{
   FILE *f = fopen(file_name, "rb");
   fseek(f, 0, SEEK_END);
   size_t fsize = ftell(f);
@@ -19,7 +20,8 @@ const char *read_file(const char *file_name) {
   return buff;
 }
 
-static unsigned int compile_shader(unsigned int type, const char *source) {
+static unsigned int compile_shader(unsigned int type, const char *source)
+{
   unsigned int id = glCreateShader(type);
   glShaderSource(id, 1, &source, NULL);
   glCompileShader(id);
@@ -27,7 +29,8 @@ static unsigned int compile_shader(unsigned int type, const char *source) {
   return id;
 }
 
-static unsigned int create_shader(const char *vert, const char *frag) {
+static unsigned int create_shader(const char *vert, const char *frag)
+{
   unsigned int prog = glCreateProgram();
   unsigned int vs = compile_shader(GL_VERTEX_SHADER, vert);
   unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, frag);
@@ -43,15 +46,21 @@ static unsigned int create_shader(const char *vert, const char *frag) {
   return prog;
 }
 
-static void error_callback(int error, const char *description) { fprintf(stderr, "[ERROR]: %s\n", description); }
+static void error_callback(int error, const char *description)
+{
+  fprintf(stderr, "[ERROR]: %s\n", description);
+}
 
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-  if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+  if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+  {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
   }
 }
 
-int main(void) {
+int main(void)
+{
   glfwSetErrorCallback(error_callback);
   glfwInit();
 
@@ -65,9 +74,9 @@ int main(void) {
   glfwMakeContextCurrent(w);
   glfwSetKeyCallback(w, key_callback);
 
-  glewExperimental = GL_TRUE;
   GLenum error = glewInit();
-  if (GLEW_OK != error) {
+  if (GLEW_OK != error)
+  {
     fprintf(stderr, "[ERROR]: %s\n", glewGetErrorString(error));
     return 1;
   }
@@ -80,12 +89,7 @@ int main(void) {
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
 
-  float points[12] = {
-      -0.5f, -0.5f, 0.0f, // Bottom-left
-      0.5f,  -0.5f, 0.0f, // Bottom-right
-      0.5f,  0.5f,  0.0f, // Top-right
-      -0.5f, 0.5f,  0.0f  // Top-left
-  };
+  float points[9] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f};
   GLuint vbo = 0;
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -96,12 +100,12 @@ int main(void) {
   glBindVertexArray(vao);
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 
   const char *vertex_shader = "#version 400\n"
                               "in vec3 vp;"
                               "void main() {"
-                              "  gl_Position = vec4(vp, 1.0);"
+                              "  gl_Position = vec4(vp.x, vp.y, 0.0, 1.0);"
                               "}";
 
   const char *fragment_shader = "#version 400\n"
@@ -124,7 +128,8 @@ int main(void) {
   glLinkProgram(program);
   glUseProgram(program);
 
-  while (!glfwWindowShouldClose(w)) {
+  while (!glfwWindowShouldClose(w))
+  {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

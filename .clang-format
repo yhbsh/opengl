@@ -1,0 +1,3 @@
+ColumnLimit: 200
+BasedOnStyle: MICROSOFT
+IndentWidth: 2
