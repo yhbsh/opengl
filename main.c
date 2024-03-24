@@ -93,6 +93,19 @@ int main(void) {
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
+  float points1[] = {-0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.0f, 0.0f, -0.5f, 0.0f};
+  GLuint vbo1 = 0;
+  glGenBuffers(1, &vbo1);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo1);
+  glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points1, GL_STATIC_DRAW);
+
+  GLuint vao1 = 0;
+  glGenVertexArrays(1, &vao1);
+  glBindVertexArray(vao1);
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo1);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
   const char *vertex_shader = "#version 400\n"
                               "in vec3 vp;"
                               "void main() {"
@@ -108,6 +121,7 @@ int main(void) {
   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vs, 1, &vertex_shader, NULL);
   glCompileShader(vs);
+
   GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fs, 1, &fragment_shader, NULL);
   glCompileShader(fs);
@@ -118,12 +132,14 @@ int main(void) {
   glLinkProgram(program);
 
   while (!glfwWindowShouldClose(w)) {
-    // wipe the drawing surface clear
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(program);
+
     glBindVertexArray(vao);
-    // draw points 0-3 from the currently bound VAO with current in-use shader
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_POINTS, 0, 3);
+
+    glBindVertexArray(vao1);
+    glDrawArrays(GL_POINTS, 0, 3);
 
     glfwPollEvents();
     glfwSwapBuffers(w);
