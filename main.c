@@ -5,6 +5,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const char *read_file(const char *file_name) {
+  FILE *f = fopen(file_name, "rb");
+  fseek(f, 0, SEEK_END);
+  size_t fsize = ftell(f);
+  fseek(f, 0, SEEK_SET);
+  char *buff = malloc(fsize + 1);
+  fread(buff, fsize, 1, f);
+
+  buff[fsize] = '\0';
+  fclose(f);
+
+  return buff;
+}
+
 static unsigned int compile_shader(unsigned int type, const char *source) {
   unsigned int id = glCreateShader(type);
   glShaderSource(id, 1, &source, NULL);
@@ -69,7 +83,6 @@ int main(void) {
   while (!glfwWindowShouldClose(w)) {
     glClearColor(0.2f, 0.4f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-
 
     glfwSwapBuffers(w);
     glfwPollEvents();
