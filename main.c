@@ -1,125 +1,92 @@
-#define GL_SILENCE_DEPRECATION
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <OpenGL/gl.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-static void error_callback(int error, const char *description)
+int width, height;
+unsigned char *image = NULL;
+
+void display()
 {
-  fprintf(stderr, "[ERROR]: code: %d - error: %s\n", error, description);
+  glClear(GL_COLOR_BUFFER_BIT);
+  glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
+  glFlush();
 }
 
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+void readPPM(const char *filename)
 {
-  if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+  FILE *file = fopen(filename, "rb");
+  if (file == NULL)
   {
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
+    printf("Error opening file: %s\n", filename);
+    exit(1);
   }
+
+  char magic[3];
+  fscanf(file, "%s", magic);
+  if (magic[0] != 'P' || magic[1] != '6')
+  {
+    printf("Unsupported file format: %s\n", filename);
+    exit(1);
+  }
+
+  fscanf(file, "%d %d", &width, &height);
+  int maxValue;
+  fscanf(file, "%d", &maxValue);
+  if (maxValue != 255)
+  {
+    printf("Unsupported max value: %d\n", maxValue);
+    exit(1);
+  }
+
+  image = (unsigned char *)malloc(width * height * 3);
+  fread(image, width * height * 3, 1, file);
+  fclose(file);
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
-  glfwSetErrorCallback(error_callback);
-  glfwInit();
-
-  glfwWindowHint(GLFW_SAMPLES, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-  GLFWwindow *w = glfwCreateWindow(600, 600, "Rotating Rectangle", NULL, NULL);
-  glfwMakeContextCurrent(w);
-  glfwSetKeyCallback(w, key_callback);
-
-  glewExperimental = GL_TRUE;
-  GLenum error = glewInit();
-  if (GLEW_OK != error)
+  if (argc != 2)
   {
-    fprintf(stderr, "[ERROR]: %s\n", glewGetErrorString(error));
-    return 1;
+    printf("Usage: %s <ppm_file>\n", argv[0]);
+    exit(1);
   }
 
-  const GLubyte *renderer = glGetString(GL_RENDERER);
-  const GLubyte *version = glGetString(GL_VERSION);
-  printf("Renderer: %s\n", renderer);
-  printf("OpenGL version supported %s\n", version);
+  readPPM(argv[1]);
 
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
-
-  float points[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f};
-
-  GLuint vbo;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
-
-  GLuint vao;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-
-  const char *vertex_shader = "#version 400\n"
-                              "uniform float rotation;"
-                              "in vec2 vp;"
-                              "void main() {"
-                              "    float x = vp.x * cos(rotation) - vp.y * sin(rotation);"
-                              "    float y = vp.x * sin(rotation) + vp.y * cos(rotation);"
-                              "    gl_Position = vec4(x, y, 0.0, 1.0);"
-                              "}";
-
-  const char *fragment_shader = "#version 400\n"
-                                "uniform vec4 in_colour;"
-                                "out vec4 frag_colour;"
-                                "void main() {"
-                                "    frag_colour = in_colour;"
-                                "}";
-
-  GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vs, 1, &vertex_shader, NULL);
-  glCompileShader(vs);
-
-  GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fs, 1, &fragment_shader, NULL);
-  glCompileShader(fs);
-
-  GLuint program = glCreateProgram();
-  glAttachShader(program, fs);
-  glAttachShader(program, vs);
-  glLinkProgram(program);
-  glUseProgram(program);
-
-  GLint rotation_loc = glGetUniformLocation(program, "rotation");
-  GLint in_col_loc = glGetUniformLocation(program, "in_colour");
-
-  while (!glfwWindowShouldClose(w))
+  if (!glfwInit())
   {
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, 600, 600);
+    printf("Failed to initialize GLFW.\n");
+    exit(1);
+  }
 
-    float angle = (float)glfwGetTime();
-    glUniform1f(rotation_loc, angle);
-    glUniform4f(in_col_loc, angle / 10, angle / 2, angle / 2, 1.0f);
+  GLFWwindow *window = glfwCreateWindow(width, height, "PPM Viewer", NULL, NULL);
+  if (!window)
+  {
+    printf("Failed to create GLFW window.\n");
+    glfwTerminate();
+    exit(1);
+  }
 
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+  glfwMakeContextCurrent(window);
 
+  if (glewInit() != GLEW_OK)
+  {
+    printf("Failed to initialize GLEW.\n");
+    glfwTerminate();
+    exit(1);
+  }
+
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+  while (!glfwWindowShouldClose(window))
+  {
+    display();
+    glfwSwapBuffers(window);
     glfwPollEvents();
-    glfwSwapBuffers(w);
   }
-
-  glDeleteProgram(program);
-  glDeleteShader(fs);
-  glDeleteShader(vs);
-  glDeleteBuffers(1, &vbo);
-  glDeleteVertexArrays(1, &vao);
 
   glfwTerminate();
+  free(image);
   return 0;
 }
