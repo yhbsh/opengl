@@ -8,7 +8,7 @@
 
 static void error_callback(int error, const char *description)
 {
-  fprintf(stderr, "[ERROR]: %s\n", description);
+  fprintf(stderr, "[ERROR]: code: %d - error: %s\n", error, description);
 }
 
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
