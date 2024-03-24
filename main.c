@@ -2,91 +2,126 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <x264.h>
 
-int width, height;
-unsigned char *image = NULL;
+#define INBUF_SIZE 4096
 
-void display()
+static void display(GLFWwindow *window, GLuint tex_handle, int width, int height)
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
-  glFlush();
-}
-
-void readPPM(const char *filename)
-{
-  FILE *file = fopen(filename, "rb");
-  if (file == NULL)
-  {
-    printf("Error opening file: %s\n", filename);
-    exit(1);
-  }
-
-  char magic[3];
-  fscanf(file, "%s", magic);
-  if (magic[0] != 'P' || magic[1] != '6')
-  {
-    printf("Unsupported file format: %s\n", filename);
-    exit(1);
-  }
-
-  fscanf(file, "%d %d", &width, &height);
-  int maxValue;
-  fscanf(file, "%d", &maxValue);
-  if (maxValue != 255)
-  {
-    printf("Unsupported max value: %d\n", maxValue);
-    exit(1);
-  }
-
-  image = (unsigned char *)malloc(width * height * 3);
-  fread(image, width * height * 3, 1, file);
-  fclose(file);
+  glBindTexture(GL_TEXTURE_2D, tex_handle);
+  glBegin(GL_QUADS);
+  glTexCoord2f(0.0f, 1.0f);
+  glVertex2f(-1.0f, -1.0f);
+  glTexCoord2f(1.0f, 1.0f);
+  glVertex2f(1.0f, -1.0f);
+  glTexCoord2f(1.0f, 0.0f);
+  glVertex2f(1.0f, 1.0f);
+  glTexCoord2f(0.0f, 0.0f);
+  glVertex2f(-1.0f, 1.0f);
+  glEnd();
+  glfwSwapBuffers(window);
 }
 
 int main(int argc, char **argv)
 {
   if (argc != 2)
   {
-    printf("Usage: %s <ppm_file>\n", argv[0]);
-    exit(1);
+    fprintf(stderr, "Usage: %s <input file>\n", argv[0]);
+    return -1;
   }
 
-  readPPM(argv[1]);
+  FILE *infile = fopen(argv[1], "rb");
+  if (!infile)
+  {
+    fprintf(stderr, "Could not open input file.\n");
+    return -1;
+  }
 
+  GLFWwindow *window;
   if (!glfwInit())
   {
-    printf("Failed to initialize GLFW.\n");
-    exit(1);
+    fprintf(stderr, "Could not initialize GLFW.\n");
+    return -1;
   }
 
-  GLFWwindow *window = glfwCreateWindow(width, height, "PPM Viewer", NULL, NULL);
+  window = glfwCreateWindow(640, 480, "x264 OpenGL Video Player", NULL, NULL);
   if (!window)
   {
-    printf("Failed to create GLFW window.\n");
+    fprintf(stderr, "Could not create GLFW window.\n");
     glfwTerminate();
-    exit(1);
+    return -1;
   }
 
   glfwMakeContextCurrent(window);
 
   if (glewInit() != GLEW_OK)
   {
-    printf("Failed to initialize GLEW.\n");
+    fprintf(stderr, "Could not initialize GLEW.\n");
     glfwTerminate();
-    exit(1);
+    return -1;
   }
 
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  x264_picture_t pic_in, pic_out;
+  x264_param_t param;
+  x264_t *encoder;
+  x264_nal_t *nals;
+  int num_nals, frame_size, i_frame = 0;
+  int width, height;
+  char buf[INBUF_SIZE];
+
+  x264_param_default(&param);
+  param.i_width = 640;
+  param.i_height = 480;
+  param.i_csp = X264_CSP_I420;
+  param.i_log_level = X264_LOG_NONE;
+  param.b_repeat_headers = 1;
+  encoder = x264_encoder_open(&param);
+
+  x264_picture_alloc(&pic_in, param.i_csp, param.i_width, param.i_height);
+  width = param.i_width;
+  height = param.i_height;
+
+  GLuint tex_handle;
+  glGenTextures(1, &tex_handle);
+  glBindTexture(GL_TEXTURE_2D, tex_handle);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
   while (!glfwWindowShouldClose(window))
   {
-    display();
-    glfwSwapBuffers(window);
+    while (fgets(buf, INBUF_SIZE, infile))
+    {
+      if (!strncmp(buf, "FRAME", 5))
+      {
+        fread(&frame_size, 1, 4, infile);
+        fread(pic_in.img.plane[0], 1, frame_size, infile);
+        x264_encoder_encode(encoder, &nals, &num_nals, &pic_in, &pic_out);
+
+        for (int i = 0; i < num_nals; i++)
+        {
+          if (nals[i].i_type == NAL_SLICE)
+          {
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pic_out.img.plane[0]);
+            display(window, tex_handle, width, height);
+            i_frame++;
+            break;
+          }
+        }
+      }
+    }
+
     glfwPollEvents();
   }
 
+  x264_encoder_close(encoder);
+  x264_picture_clean(&pic_in);
+  glDeleteTextures(1, &tex_handle);
+  glfwDestroyWindow(window);
   glfwTerminate();
-  free(image);
+  fclose(infile);
+
   return 0;
 }
