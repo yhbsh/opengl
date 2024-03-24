@@ -5,47 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char *read_file(const char *file_name)
-{
-  FILE *f = fopen(file_name, "rb");
-  fseek(f, 0, SEEK_END);
-  size_t fsize = ftell(f);
-  fseek(f, 0, SEEK_SET);
-  char *buff = malloc(fsize + 1);
-  fread(buff, fsize, 1, f);
-
-  buff[fsize] = '\0';
-  fclose(f);
-
-  return buff;
-}
-
-static unsigned int compile_shader(unsigned int type, const char *source)
-{
-  unsigned int id = glCreateShader(type);
-  glShaderSource(id, 1, &source, NULL);
-  glCompileShader(id);
-
-  return id;
-}
-
-static unsigned int create_shader(const char *vert, const char *frag)
-{
-  unsigned int prog = glCreateProgram();
-  unsigned int vs = compile_shader(GL_VERTEX_SHADER, vert);
-  unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, frag);
-
-  glAttachShader(prog, vs);
-  glAttachShader(prog, fs);
-  glLinkProgram(prog);
-  glValidateProgram(prog);
-
-  glDeleteShader(vs);
-  glDeleteShader(fs);
-
-  return prog;
-}
-
 static void error_callback(int error, const char *description)
 {
   fprintf(stderr, "[ERROR]: %s\n", description);
