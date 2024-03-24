@@ -74,9 +74,10 @@ int main(void)
                               "}";
 
   const char *fragment_shader = "#version 400\n"
+                                "uniform vec4 in_colour;"
                                 "out vec4 frag_colour;"
                                 "void main() {"
-                                "    frag_colour = vec4(1.0, 0.5, 0.5, 1.0);"
+                                "    frag_colour = in_colour;"
                                 "}";
 
   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
@@ -94,6 +95,7 @@ int main(void)
   glUseProgram(program);
 
   GLint rotation_loc = glGetUniformLocation(program, "rotation");
+  GLint in_col_loc = glGetUniformLocation(program, "in_colour");
 
   while (!glfwWindowShouldClose(w))
   {
@@ -101,8 +103,9 @@ int main(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, 600, 600);
 
-    float rotation_angle = (float)glfwGetTime() * 12.0f;
-    glUniform1f(rotation_loc, rotation_angle);
+    float angle = (float)glfwGetTime();
+    glUniform1f(rotation_loc, angle);
+    glUniform4f(in_col_loc, angle / 10, angle / 2, angle / 2, 1.0f);
 
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
