@@ -84,9 +84,6 @@ int main(int argc, char *argv[]) {
       glLoadIdentity();
       glOrtho(0, width, height, 0, -1, 1);
 
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-
       glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 0.0f);
       glVertex2i(0, 0);
