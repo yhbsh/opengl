@@ -1,5 +1,5 @@
-CC=gcc
-CXX=g++
+CC=clang
+CXX=clang++
 CFLAGS=-Wall
 CXXFLAGS=-Wall
 LDFLAGS=-lsdl2 -lglfw -lglew -lavformat -lavcodec -lswscale -framework opengl
