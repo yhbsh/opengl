@@ -1,4 +1,4 @@
-all: main rectangle triangle ppm frame_buffer
+all: main rectangle triangle ppm frame_buffer player
 
 main: main.c
 	cc -O3 main.c -o main -lavformat -lavcodec -lavutil -lswscale -lglew -lglfw -framework opengl
@@ -14,3 +14,6 @@ ppm: ppm.c
 
 frame_buffer: frame_buffer.c
 	cc -O3 frame_buffer.c -o frame_buffer -lsdl2
+
+player: player.c
+	cc -O3 player.c -o player -lavformat -lavcodec -lavutil -lswscale -lglew -lglfw -framework opengl

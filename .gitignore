@@ -3,6 +3,7 @@ triangle
 rectangle
 ppm
 frame_buffer
+player
 .vscode
 *.dSYM
 *.mp4
