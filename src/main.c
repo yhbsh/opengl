@@ -21,12 +21,10 @@ int main(int argc, char *argv[]) {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-  glfwWindowHint(GLFW_SAMPLES, 4);  // Enable 4x multisampling
 
   GLFWwindow *window =
       glfwCreateWindow(width, height, "Animated UV Pattern", NULL, NULL);
   glfwMakeContextCurrent(window);
-  glEnable(GL_MULTISAMPLE);  // Enable multisampling
 
   AVFormatContext *format_context = NULL;
   ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
