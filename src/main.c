@@ -23,25 +23,15 @@ int main(int argc, char *argv[]) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   glfwWindowHint(GLFW_SAMPLES, 4);  // Enable 4x multisampling
 
-  GLFWwindow *window = glfwCreateWindow(
-      width, height, "Animated UV Pattern", NULL, NULL);
+  GLFWwindow *window =
+      glfwCreateWindow(width, height, "Animated UV Pattern", NULL, NULL);
   glfwMakeContextCurrent(window);
   glEnable(GL_MULTISAMPLE);  // Enable multisampling
 
   AVFormatContext *format_context = NULL;
   ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
-  if (ret < 0) {
-    fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
-    return 1;
-  }
-
   ret = avformat_find_stream_info(format_context, NULL);
-  if (ret < 0) {
-    fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
-    return 1;
-  }
-
-  int vs = -1;
+  int vs = 0;
   AVStream *stream = NULL;
   for (int i = 0; i < format_context->nb_streams; i++) {
     stream = format_context->streams[i];
@@ -50,41 +40,12 @@ int main(int argc, char *argv[]) {
       break;
     }
   }
-  if (vs == -1 || stream == NULL) {
-    fprintf(stderr, "[ERROR]: did not find video stream\n");
-    return 1;
-  }
-
   enum AVCodecID codec_id = stream->codecpar->codec_id;
   const AVCodec *codec = avcodec_find_decoder(codec_id);
-  if (codec == NULL) {
-    fprintf(stderr, "[ERROR]: not codec found\n");
-    return 1;
-  }
-
   AVCodecContext *codec_context = avcodec_alloc_context3(codec);
-  if (codec_context == NULL) {
-    fprintf(stderr, "[ERROR]: could not allocate codec context\n");
-    return 1;
-  }
-  ret =
-      avcodec_parameters_to_context(codec_context, stream->codecpar);
-  if (ret < 0) {
-    fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
-    return 1;
-  }
-
+  ret = avcodec_parameters_to_context(codec_context, stream->codecpar);
   ret = avcodec_open2(codec_context, codec, NULL);
-  if (ret < 0) {
-    fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
-    return 1;
-  }
-
   AVFrame *frame = av_frame_alloc();
-  if (frame == NULL) {
-    fprintf(stderr, "[ERROR]: could not alloca frame\n");
-    return 1;
-  }
   AVPacket packet;
 
   struct SwsContext *sws_context = NULL;
@@ -100,35 +61,20 @@ int main(int argc, char *argv[]) {
 
   while (!glfwWindowShouldClose(window)) {
     ret = av_read_frame(format_context, &packet);
-    if (ret < 0) {
-      fprintf(stderr, "[ERROR]: av_read_frame(): %s\n",
-              av_err2str(ret));
-      return 1;
-    }
     if (packet.stream_index != stream->index) {
       continue;
     }
 
     ret = avcodec_send_packet(codec_context, &packet);
-    if (ret < 0) {
-      fprintf(stderr, "[ERROR]: avcodec_send_packet(): %s\n",
-              av_err2str(ret));
-      break;
-    }
-
     while (ret >= 0) {
       ret = avcodec_receive_frame(codec_context, frame);
       if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
         break;
-      } else if (ret < 0) {
-        fprintf(stderr, "[ERROR]: avcodec_receive_frame(): %s\n",
-                av_err2str(ret));
-        break;
       }
 
       const char *name = av_get_pix_fmt_name(codec_context->pix_fmt);
-      printf("format: %s - width: %d - height: %d - linesize: %d\n",
-             name, frame->width, frame->height, frame->linesize[0]);
+      printf("format: %s - width: %d - height: %d - linesize: %d\n", name,
+             frame->width, frame->height, frame->linesize[0]);
 
       AVFrame *output_frame = av_frame_alloc();
       struct SwsContext *sws_context = sws_getContext(
