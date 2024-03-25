@@ -28,7 +28,7 @@ int main()
   glfwSetKeyCallback(w, key_callback);
   glewInit();
 
-  uint32_t *buffer = malloc(width * height * 4); // Correct buffer size
+  uint32_t *buffer = malloc(width * height * 4);
 
   for (int y = 0; y < height; y++)
   {
