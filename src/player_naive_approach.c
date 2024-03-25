@@ -97,8 +97,6 @@ int main(int argc, char *argv[]) {
   }
   AVPacket packet;
 
-  struct SwsContext *sws_context = NULL;
-
   while (!glfwWindowShouldClose(w)) {
     ret = av_read_frame(format_context, &packet);
     if (ret < 0) {

@@ -85,8 +85,6 @@ int main(int argc, char *argv[]) {
   }
   AVPacket packet;
 
-  struct SwsContext *sws_context = NULL;
-
   GLuint texture;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
