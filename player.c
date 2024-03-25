@@ -19,8 +19,13 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action,
   }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
   int ret;
+
+  if (argc != 2) {
+    fprintf(stderr, "[USAGE]: ./player [url]\n");
+    return 1;
+  }
 
   const int width = 960;
   const int height = 540;
@@ -36,8 +41,7 @@ int main() {
   printf("version = %s\n", glGetString(GL_VERSION));
 
   AVFormatContext *format_context = NULL;
-  ret = avformat_open_input(&format_context,
-                            "rtmp://localhost:1935/live/stream", NULL, NULL);
+  ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
   if (ret < 0) {
     fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
     return 1;
