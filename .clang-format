@@ -1,3 +1,3 @@
-ColumnLimit: 200
-BasedOnStyle: MICROSOFT
+ColumnLimit: 80
+BasedOnStyle: LLVM
 IndentWidth: 2
