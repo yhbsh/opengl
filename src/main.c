@@ -1,4 +1,3 @@
-#include "libavutil/pixdesc.h"
 #define GL_SILENCE_DEPRECATION  // Silence deprecated OpenGL warnings
 #include <GLFW/glfw3.h>
 #include <libavcodec/avcodec.h>
@@ -15,8 +14,8 @@ int main(int argc, char *argv[]) {
   }
 
   int ret;
-  const int width = 800;
-  const int height = 600;
+  const int width = 1920;
+  const int height = 1080;
 
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
