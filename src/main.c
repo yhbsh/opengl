@@ -8,7 +8,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(int argc, char *argv[]) {
+  if (argc != 2) {
+    fprintf(stderr, "[USAGE]: ./player_texture [url]");
+    return 1;
+  }
+
   int ret;
   const int window_width = 800;
   const int window_height = 600;
@@ -24,9 +29,7 @@ int main() {
   glEnable(GL_MULTISAMPLE);  // Enable multisampling
 
   AVFormatContext *format_context = NULL;
-  ret = avformat_open_input(&format_context,
-                            "rtmp://localhost:1935/live/stream", NULL,
-                            NULL);
+  ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
   if (ret < 0) {
     fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
     return 1;
@@ -139,25 +142,9 @@ int main() {
 
       sws_freeContext(sws_context);
 
-      uint8_t *src_data = output_frame->data[0];
-      int src_stride = output_frame->linesize[0];
-      int dst_stride = output_frame->linesize[0];
-
-      int buffer_size =
-          output_frame->linesize[0] * output_frame->height;
-      uint8_t *flipped_data = (uint8_t *)malloc(buffer_size);
-      for (int y = 0; y < output_frame->height; ++y) {
-        memcpy(flipped_data +
-                   (output_frame->height - 1 - y) * dst_stride,
-               src_data + y * src_stride, src_stride);
-      }
-
       glClear(GL_COLOR_BUFFER_BIT);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-                   GL_UNSIGNED_BYTE, flipped_data);
-      glDrawPixels(output_frame->width, output_frame->height, GL_RGB,
-                   GL_UNSIGNED_BYTE, flipped_data);
-      free(flipped_data);
+                   GL_UNSIGNED_BYTE, output_frame->data[0]);
 
       glClear(GL_COLOR_BUFFER_BIT);
 
