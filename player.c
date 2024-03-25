@@ -27,8 +27,8 @@ int main() {
   glfwSetErrorCallback(error_callback);
   glfwInit();
 
-  // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   GLFWwindow *w = glfwCreateWindow(width, height, "Video", NULL, NULL);
   glfwMakeContextCurrent(w);
   glfwSetKeyCallback(w, key_callback);
