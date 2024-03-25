@@ -12,8 +12,7 @@ static void error_callback(int error, const char *description) {
   fprintf(stderr, "[ERROR]: code: %d - error: %s\n", error, description);
 }
 
-static void key_callback(GLFWwindow *window, int key, int scancode, int action,
-                         int mods) {
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
   if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
   }
@@ -70,14 +69,12 @@ int main(int argc, char *argv[]) {
   enum AVCodecID codec_id = stream->codecpar->codec_id;
   const AVCodec *codec = avcodec_find_decoder(codec_id);
   if (codec == NULL) {
-
     fprintf(stderr, "[ERROR]: not codec found\n");
     return 1;
   }
 
   AVCodecContext *codec_context = avcodec_alloc_context3(codec);
   if (codec_context == NULL) {
-
     fprintf(stderr, "[ERROR]: could not allocate codec context\n");
     return 1;
   }
@@ -123,19 +120,18 @@ int main(int argc, char *argv[]) {
       if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
         break;
       } else if (ret < 0) {
-        fprintf(stderr, "[ERROR]: avcodec_receive_frame(): %s\n",
-                av_err2str(ret));
+        fprintf(stderr, "[ERROR]: avcodec_receive_frame(): %s\n", av_err2str(ret));
         break;
       }
 
       const char *name = av_get_pix_fmt_name(frame->format);
-      printf("format: %s - width: %d - height: %d - linesize: %d\n", name,
-             frame->width, frame->height, frame->linesize[0]);
+      printf("format: %s - width: %d - height: %d - linesize: %d\n", name, frame->width,
+             frame->height, frame->linesize[0]);
 
       AVFrame *output_frame = av_frame_alloc();
-      struct SwsContext *sws_context = sws_getContext(
-          frame->width, frame->height, frame->format, width, height,
-          AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
+      struct SwsContext *sws_context =
+          sws_getContext(frame->width, frame->height, frame->format, width, height,
+                         AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
 
       sws_scale_frame(sws_context, output_frame, frame);
 
@@ -153,8 +149,8 @@ int main(int argc, char *argv[]) {
       }
 
       glClear(GL_COLOR_BUFFER_BIT);
-      glDrawPixels(output_frame->width, output_frame->height, GL_RGB,
-                   GL_UNSIGNED_BYTE, flipped_data);
+      glDrawPixels(output_frame->width, output_frame->height, GL_RGB, GL_UNSIGNED_BYTE,
+                   flipped_data);
       free(flipped_data);
 
       glViewport(0, 0, width, height);

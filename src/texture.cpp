@@ -13,8 +13,8 @@ int main() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   glfwWindowHint(GLFW_SAMPLES, 16);
 
-  GLFWwindow* window = glfwCreateWindow(
-      window_width, window_height, "Animated UV Pattern", NULL, NULL);
+  GLFWwindow* window =
+      glfwCreateWindow(window_width, window_height, "Animated UV Pattern", NULL, NULL);
   glfwMakeContextCurrent(window);
 
   GLuint texture;
@@ -55,17 +55,14 @@ int main() {
 
         // Set the color channels based on the modified U and V
         // coordinates
-        data[(y * width + x) * 3 + 0] =
-            static_cast<unsigned char>(u * 255);
-        data[(y * width + x) * 3 + 1] =
-            static_cast<unsigned char>(v * 255);
+        data[(y * width + x) * 3 + 0] = static_cast<unsigned char>(u * 255);
+        data[(y * width + x) * 3 + 1] = static_cast<unsigned char>(v * 255);
         data[(y * width + x) * 3 + 2] = 0;
       }
     }
 
     // Upload the texture data to the GPU
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 
     // Free the allocated memory for the texture data
     delete[] data;

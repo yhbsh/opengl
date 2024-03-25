@@ -13,9 +13,8 @@ int main() {
   }
 
   // Create a window
-  window = SDL_CreateWindow(
-      "Pixel Buffer Example", SDL_WINDOWPOS_UNDEFINED,
-      SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+  window = SDL_CreateWindow("Pixel Buffer Example", SDL_WINDOWPOS_UNDEFINED,
+                            SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
   if (window == NULL) {
     printf("Window creation failed: %s\n", SDL_GetError());
     return 1;
@@ -32,8 +31,7 @@ int main() {
       Uint8 red = (Uint8)(((float)x / width) * 255);
       Uint8 green = (Uint8)(((float)y / height) * 255);
       Uint8 blue = (Uint8)(((float)(x + y) / (width + height)) * 255);
-      pixels[y * width + x] =
-          SDL_MapRGB(surface->format, red, green, blue);
+      pixels[y * width + x] = SDL_MapRGB(surface->format, red, green, blue);
     }
   }
   SDL_UnlockSurface(surface);

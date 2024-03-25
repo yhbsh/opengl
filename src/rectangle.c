@@ -6,21 +6,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void error_callback(int error, const char *description)
-{
+static void error_callback(int error, const char *description) {
   fprintf(stderr, "[ERROR]: code: %d - error: %s\n", error, description);
 }
 
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-  if (key == GLFW_KEY_Q && action == GLFW_PRESS)
-  {
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+  if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
   }
 }
 
-int main(void)
-{
+int main(void) {
   glfwSetErrorCallback(error_callback);
   glfwInit();
 
@@ -36,8 +32,7 @@ int main(void)
 
   glewExperimental = GL_TRUE;
   GLenum error = glewInit();
-  if (GLEW_OK != error)
-  {
+  if (GLEW_OK != error) {
     fprintf(stderr, "[ERROR]: %s\n", glewGetErrorString(error));
     return 1;
   }
@@ -64,21 +59,23 @@ int main(void)
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 
-  const char *vertex_shader = "#version 400\n"
-                              "uniform float rotation;"
-                              "in vec2 vp;"
-                              "void main() {"
-                              "    float x = vp.x * cos(rotation) - vp.y * sin(rotation);"
-                              "    float y = vp.x * sin(rotation) + vp.y * cos(rotation);"
-                              "    gl_Position = vec4(x, y, 0.0, 1.0);"
-                              "}";
+  const char *vertex_shader =
+      "#version 400\n"
+      "uniform float rotation;"
+      "in vec2 vp;"
+      "void main() {"
+      "    float x = vp.x * cos(rotation) - vp.y * sin(rotation);"
+      "    float y = vp.x * sin(rotation) + vp.y * cos(rotation);"
+      "    gl_Position = vec4(x, y, 0.0, 1.0);"
+      "}";
 
-  const char *fragment_shader = "#version 400\n"
-                                "uniform vec4 in_colour;"
-                                "out vec4 frag_colour;"
-                                "void main() {"
-                                "    frag_colour = in_colour;"
-                                "}";
+  const char *fragment_shader =
+      "#version 400\n"
+      "uniform vec4 in_colour;"
+      "out vec4 frag_colour;"
+      "void main() {"
+      "    frag_colour = in_colour;"
+      "}";
 
   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vs, 1, &vertex_shader, NULL);
@@ -97,8 +94,7 @@ int main(void)
   GLint rotation_loc = glGetUniformLocation(program, "rotation");
   GLint in_col_loc = glGetUniformLocation(program, "in_colour");
 
-  while (!glfwWindowShouldClose(w))
-  {
+  while (!glfwWindowShouldClose(w)) {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, 600, 600);

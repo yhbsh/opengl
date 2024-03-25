@@ -6,26 +6,22 @@
 int width, height;
 unsigned char *image = NULL;
 
-void display()
-{
+void display() {
   glClear(GL_COLOR_BUFFER_BIT);
   glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
   glFlush();
 }
 
-void readPPM(const char *filename)
-{
+void readPPM(const char *filename) {
   FILE *file = fopen(filename, "rb");
-  if (file == NULL)
-  {
+  if (file == NULL) {
     printf("Error opening file: %s\n", filename);
     exit(1);
   }
 
   char magic[3];
   fscanf(file, "%s", magic);
-  if (magic[0] != 'P' || magic[1] != '6')
-  {
+  if (magic[0] != 'P' || magic[1] != '6') {
     printf("Unsupported file format: %s\n", filename);
     exit(1);
   }
@@ -33,8 +29,7 @@ void readPPM(const char *filename)
   fscanf(file, "%d %d", &width, &height);
   int maxValue;
   fscanf(file, "%d", &maxValue);
-  if (maxValue != 255)
-  {
+  if (maxValue != 255) {
     printf("Unsupported max value: %d\n", maxValue);
     exit(1);
   }
@@ -44,25 +39,21 @@ void readPPM(const char *filename)
   fclose(file);
 }
 
-int main(int argc, char **argv)
-{
-  if (argc != 2)
-  {
+int main(int argc, char **argv) {
+  if (argc != 2) {
     printf("Usage: %s <ppm_file>\n", argv[0]);
     exit(1);
   }
 
   readPPM(argv[1]);
 
-  if (!glfwInit())
-  {
+  if (!glfwInit()) {
     printf("Failed to initialize GLFW.\n");
     exit(1);
   }
 
   GLFWwindow *window = glfwCreateWindow(width, height, "PPM Viewer", NULL, NULL);
-  if (!window)
-  {
+  if (!window) {
     printf("Failed to create GLFW window.\n");
     glfwTerminate();
     exit(1);
@@ -70,8 +61,7 @@ int main(int argc, char **argv)
 
   glfwMakeContextCurrent(window);
 
-  if (glewInit() != GLEW_OK)
-  {
+  if (glewInit() != GLEW_OK) {
     printf("Failed to initialize GLEW.\n");
     glfwTerminate();
     exit(1);
@@ -79,8 +69,7 @@ int main(int argc, char **argv)
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-  while (!glfwWindowShouldClose(window))
-  {
+  while (!glfwWindowShouldClose(window)) {
     display();
     glfwSwapBuffers(window);
     glfwPollEvents();
