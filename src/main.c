@@ -15,8 +15,8 @@ int main(int argc, char *argv[]) {
   }
 
   int ret;
-  const int window_width = 800;
-  const int window_height = 600;
+  const int width = 800;
+  const int height = 600;
 
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
   glfwWindowHint(GLFW_SAMPLES, 4);  // Enable 4x multisampling
 
   GLFWwindow *window = glfwCreateWindow(
-      window_width, window_height, "Animated UV Pattern", NULL, NULL);
+      width, height, "Animated UV Pattern", NULL, NULL);
   glfwMakeContextCurrent(window);
   glEnable(GL_MULTISAMPLE);  // Enable multisampling
 
@@ -98,9 +98,6 @@ int main(int argc, char *argv[]) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  const int width = 256;
-  const int height = 256;
-
   while (!glfwWindowShouldClose(window)) {
     ret = av_read_frame(format_context, &packet);
     if (ret < 0) {
@@ -153,7 +150,7 @@ int main(int argc, char *argv[]) {
 
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      glOrtho(0, window_width, window_height, 0, -1, 1);
+      glOrtho(0, width, height, 0, -1, 1);
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
@@ -162,11 +159,11 @@ int main(int argc, char *argv[]) {
       glTexCoord2f(0.0f, 0.0f);
       glVertex2i(0, 0);
       glTexCoord2f(1.0f, 0.0f);
-      glVertex2i(window_width, 0);
+      glVertex2i(width, 0);
       glTexCoord2f(1.0f, 1.0f);
-      glVertex2i(window_width, window_height);
+      glVertex2i(width, height);
       glTexCoord2f(0.0f, 1.0f);
-      glVertex2i(0, window_height);
+      glVertex2i(0, height);
       glEnd();
 
       glfwSwapBuffers(window);
