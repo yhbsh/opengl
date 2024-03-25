@@ -8,10 +8,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int main(int argc, char *argv[]) {
+  if (argc != 2) {
+    fprintf(stderr, "[USAGE]: ./player_texture [url]");
+    return 1;
+  }
+
   int ret;
-  const int window_width = 800;
-  const int window_height = 600;
+  const int width = 1920;
+  const int height = 1080;
 
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -19,14 +24,12 @@ int main() {
   glfwWindowHint(GLFW_SAMPLES, 4);  // Enable 4x multisampling
 
   GLFWwindow *window = glfwCreateWindow(
-      window_width, window_height, "Animated UV Pattern", NULL, NULL);
+      width, height, "Animated UV Pattern", NULL, NULL);
   glfwMakeContextCurrent(window);
   glEnable(GL_MULTISAMPLE);  // Enable multisampling
 
   AVFormatContext *format_context = NULL;
-  ret = avformat_open_input(&format_context,
-                            "rtmp://localhost:1935/live/stream", NULL,
-                            NULL);
+  ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
   if (ret < 0) {
     fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
     return 1;
@@ -95,9 +98,6 @@ int main() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  const int width = 256;
-  const int height = 256;
-
   while (!glfwWindowShouldClose(window)) {
     ret = av_read_frame(format_context, &packet);
     if (ret < 0) {
@@ -139,25 +139,9 @@ int main() {
 
       sws_freeContext(sws_context);
 
-      uint8_t *src_data = output_frame->data[0];
-      int src_stride = output_frame->linesize[0];
-      int dst_stride = output_frame->linesize[0];
-
-      int buffer_size =
-          output_frame->linesize[0] * output_frame->height;
-      uint8_t *flipped_data = (uint8_t *)malloc(buffer_size);
-      for (int y = 0; y < output_frame->height; ++y) {
-        memcpy(flipped_data +
-                   (output_frame->height - 1 - y) * dst_stride,
-               src_data + y * src_stride, src_stride);
-      }
-
       glClear(GL_COLOR_BUFFER_BIT);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-                   GL_UNSIGNED_BYTE, flipped_data);
-      glDrawPixels(output_frame->width, output_frame->height, GL_RGB,
-                   GL_UNSIGNED_BYTE, flipped_data);
-      free(flipped_data);
+                   GL_UNSIGNED_BYTE, output_frame->data[0]);
 
       glClear(GL_COLOR_BUFFER_BIT);
 
@@ -166,7 +150,7 @@ int main() {
 
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      glOrtho(0, window_width, window_height, 0, -1, 1);
+      glOrtho(0, width, height, 0, -1, 1);
 
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
@@ -175,11 +159,11 @@ int main() {
       glTexCoord2f(0.0f, 0.0f);
       glVertex2i(0, 0);
       glTexCoord2f(1.0f, 0.0f);
-      glVertex2i(window_width, 0);
+      glVertex2i(width, 0);
       glTexCoord2f(1.0f, 1.0f);
-      glVertex2i(window_width, window_height);
+      glVertex2i(width, height);
       glTexCoord2f(0.0f, 1.0f);
-      glVertex2i(0, window_height);
+      glVertex2i(0, height);
       glEnd();
 
       glfwSwapBuffers(window);
