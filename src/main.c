@@ -72,13 +72,13 @@ int main(int argc, char *argv[]) {
       sws_freeContext(sws_context);
 
       glClear(GL_COLOR_BUFFER_BIT);
+
+      glBindTexture(GL_TEXTURE_2D, texture);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE,
                    output_frame->data[0]);
 
       glClear(GL_COLOR_BUFFER_BIT);
-
       glEnable(GL_TEXTURE_2D);
-      glBindTexture(GL_TEXTURE_2D, texture);
 
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
