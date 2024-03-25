@@ -1,7 +1,7 @@
-all: main rectangle triangle ppm
+all: main rectangle triangle ppm frame_buffer
 
 main: main.c
-	cc -O3 main.c -o main -lsdl2
+	cc -O3 main.c -o main
 
 rectangle: rectangle.c
 	cc -O3 rectangle.c -o rectangle -lglfw -lglew -framework opengl
@@ -11,3 +11,6 @@ triangle: triangle.c
 
 ppm: ppm.c
 	cc -O3 ppm.c -o ppm -lglfw -lglew -framework opengl
+
+frame_buffer: frame_buffer.c
+	cc -O3 frame_buffer.c -o frame_buffer -lsdl2
