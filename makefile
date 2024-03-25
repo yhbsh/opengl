@@ -2,6 +2,7 @@ all: main rectangle triangle ppm frame_buffer player
 
 main: src/main.c
 	cc -O3 src/main.c -o bin/main -lglew -lglfw -framework opengl
+	@./bin/main
 
 rectangle: src/rectangle.c
 	cc -O3 src/rectangle.c -o bin/rectangle -lglfw -lglew -framework opengl

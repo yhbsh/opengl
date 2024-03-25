@@ -42,11 +42,6 @@ void init_opengl() {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_width, image_height, 0, GL_RGB,
                GL_UNSIGNED_BYTE, image_data);
 
-  GLint width, height;
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-  printf("Texture dimensions: %d x %d\n", width, height);
-
   free(image_data);
   glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -82,7 +77,7 @@ int main() {
   glewExperimental = GL_TRUE;
   glewInit();
 
-  load_ppm("file.ppm");
+  load_ppm("assets/boxes_1.ppm");
   init_opengl();
 
   while (!glfwWindowShouldClose(window)) {
