@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
-    fprintf(stderr, "[USAGE]: ./player_texture [url]");
+    fprintf(stderr, "[USAGE]: ./main [url]");
     return 1;
   }
 
@@ -168,7 +168,10 @@ int main(int argc, char *argv[]) {
 
       glfwSwapBuffers(window);
       glfwPollEvents();
+
+      av_frame_free(&output_frame);
     }
+    av_packet_unref(&packet);
   }
 
   glfwTerminate();
