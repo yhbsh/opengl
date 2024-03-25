@@ -12,6 +12,7 @@ int main() {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  glfwWindowHint(GLFW_SAMPLES, 4);  // Enable 4x multisampling
 
   GLFWwindow* window = glfwCreateWindow(
       window_width, window_height, "Animated UV Pattern", NULL, NULL);
