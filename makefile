@@ -1,7 +1,7 @@
 all: main rectangle triangle ppm frame_buffer player
 
 main: main.c
-	cc -O3 main.c -o main -lavformat -lavcodec -lavutil -lswscale -lglew -lglfw -framework opengl
+	cc -O3 main.c -o main -lglew -lglfw -framework opengl
 
 rectangle: rectangle.c
 	cc -O3 rectangle.c -o rectangle -lglfw -lglew -framework opengl
