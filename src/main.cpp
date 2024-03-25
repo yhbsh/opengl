@@ -17,6 +17,7 @@ int main() {
   GLFWwindow* window = glfwCreateWindow(
       window_width, window_height, "Animated UV Pattern", NULL, NULL);
   glfwMakeContextCurrent(window);
+  glEnable(GL_MULTISAMPLE);  // Enable multisampling
 
   GLuint texture;
   glGenTextures(1, &texture);
