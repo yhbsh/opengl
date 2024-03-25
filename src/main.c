@@ -62,10 +62,6 @@ int main(int argc, char *argv[]) {
         break;
       }
 
-      const char *name = av_get_pix_fmt_name(codec_context->pix_fmt);
-      printf("format: %s - width: %d - height: %d - linesize: %d\n", name, frame->width,
-             frame->height, frame->linesize[0]);
-
       AVFrame *output_frame = av_frame_alloc();
       struct SwsContext *sws_context =
           sws_getContext(frame->width, frame->height, frame->format, width, height,
