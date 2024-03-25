@@ -167,9 +167,21 @@ int main() {
 
       sws_freeContext(sws_context);
 
+      uint8_t *src_data = output_frame->data[0];
+      int src_stride = output_frame->linesize[0];
+      int dst_stride = output_frame->linesize[0];
+
+      int buffer_size = output_frame->linesize[0] * output_frame->height;
+      uint8_t *flipped_data = (uint8_t *)malloc(buffer_size);
+      for (int y = 0; y < output_frame->height; ++y) {
+        memcpy(flipped_data + (output_frame->height - 1 - y) * dst_stride,
+               src_data + y * src_stride, src_stride);
+      }
+
       glClear(GL_COLOR_BUFFER_BIT);
       glDrawPixels(output_frame->width, output_frame->height, GL_RGB,
-                   GL_UNSIGNED_BYTE, output_frame->data[0]);
+                   GL_UNSIGNED_BYTE, flipped_data);
+      free(flipped_data);
 
       glViewport(0, 0, width, height);
 
