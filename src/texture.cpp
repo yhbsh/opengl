@@ -1,65 +1,75 @@
 #define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>  // Include the GLFW library for window creation and input handling
-#include <stdio.h>  // Include the standard input/output library
+#include <GLFW/glfw3.h>
+#include <stdio.h>
+
+#include <cmath>  // Include the math library for sine and cosine functions
 
 int main() {
-  // Define the window dimensions
   const int window_width = 800;
   const int window_height = 600;
 
-  // Initialize GLFW
   glfwInit();
-
-  // Set the OpenGL version to 2.1
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  glfwWindowHint(GLFW_SAMPLES, 16);
 
-  // Create a window with the specified dimensions and title
-  GLFWwindow* window = glfwCreateWindow(window_width, window_height,
-                                        "UV Pattern", NULL, NULL);
-
-  // Make the OpenGL context of the window current
+  GLFWwindow* window = glfwCreateWindow(
+      window_width, window_height, "Animated UV Pattern", NULL, NULL);
   glfwMakeContextCurrent(window);
 
-  // Create a texture object
   GLuint texture;
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
 
-  // Set the texture wrapping and filtering parameters
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  // Define the texture dimensions
   const int width = 256;
   const int height = 256;
 
-  // Allocate memory for the texture data
-  unsigned char* data = new unsigned char[width * height * 3];
-
-  // Generate the UV pattern texture data
-  for (int y = 0; y < height; ++y) {
-    for (int x = 0; x < width; ++x) {
-      // Set the red channel to the U coordinate (0 to 255)
-      data[(y * width + x) * 3 + 0] = static_cast<unsigned char>(x);
-      // Set the green channel to the V coordinate (0 to 255)
-      data[(y * width + x) * 3 + 1] = static_cast<unsigned char>(y);
-      // Set the blue channel to 0
-      data[(y * width + x) * 3 + 2] = 0;
-    }
-  }
-
-  // Upload the texture data to the GPU
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-               GL_UNSIGNED_BYTE, data);
-
-  // Free the allocated memory for the texture data
-  delete[] data;
-
-  // Main rendering loop
   while (!glfwWindowShouldClose(window)) {
+    // Get the current time in seconds
+    float time = static_cast<float>(glfwGetTime());
+
+    // Allocate memory for the texture data
+    unsigned char* data = new unsigned char[width * height * 3];
+
+    // Generate the animated UV pattern texture data
+    for (int y = 0; y < height; ++y) {
+      for (int x = 0; x < width; ++x) {
+        // Calculate the U and V coordinates based on the current time
+        float u = static_cast<float>(x) / width;
+        float v = static_cast<float>(y) / height;
+
+        // Apply a sine wave pattern to the U coordinate
+        u += sin(time * 2.0f + v * 4.0f) * 0.1f;
+
+        // Apply a cosine wave pattern to the V coordinate
+        v += cos(time * 3.0f + u * 2.0f) * 0.1f;
+
+        // Clamp the U and V coordinates to the range [0, 1]
+        u = fmod(u, 1.0f);
+        v = fmod(v, 1.0f);
+
+        // Set the color channels based on the modified U and V
+        // coordinates
+        data[(y * width + x) * 3 + 0] =
+            static_cast<unsigned char>(u * 255);
+        data[(y * width + x) * 3 + 1] =
+            static_cast<unsigned char>(v * 255);
+        data[(y * width + x) * 3 + 2] = 0;
+      }
+    }
+
+    // Upload the texture data to the GPU
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+                 GL_UNSIGNED_BYTE, data);
+
+    // Free the allocated memory for the texture data
+    delete[] data;
+
     // Clear the color buffer
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -99,8 +109,6 @@ int main() {
     glfwPollEvents();
   }
 
-  // Terminate GLFW
   glfwTerminate();
-
   return 0;
 }
