@@ -1,9 +1,3 @@
-main
-triangle
-rectangle
-ppm
-frame_buffer
-player
+bin/
 .vscode
 *.dSYM
-*.mp4
