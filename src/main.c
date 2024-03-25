@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
+#include <libavutil/avutil.h>
 #include <libavutil/imgutils.h>
 #include <libswscale/swscale.h>
 #include <stdio.h>
@@ -14,8 +15,8 @@ int main(int argc, char *argv[]) {
   }
 
   int ret;
-  const int width = 1920;
-  const int height = 1080;
+  const int width = 800;
+  const int height = 600;
 
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
