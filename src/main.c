@@ -22,22 +22,14 @@ int main(int argc, char *argv[]) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-  GLFWwindow *window =
-      glfwCreateWindow(width, height, "Animated UV Pattern", NULL, NULL);
+  GLFWwindow *window = glfwCreateWindow(width, height, "Animated UV Pattern", NULL, NULL);
   glfwMakeContextCurrent(window);
+  printf("version = %s\n", glGetString(GL_VERSION));
 
   AVFormatContext *format_context = NULL;
   ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
   ret = avformat_find_stream_info(format_context, NULL);
-  int vs = 0;
-  AVStream *stream = NULL;
-  for (int i = 0; i < format_context->nb_streams; i++) {
-    stream = format_context->streams[i];
-    if (stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
-      vs = i;
-      break;
-    }
-  }
+  AVStream *stream = format_context->streams[1];
   enum AVCodecID codec_id = stream->codecpar->codec_id;
   const AVCodec *codec = avcodec_find_decoder(codec_id);
   AVCodecContext *codec_context = avcodec_alloc_context3(codec);
@@ -71,21 +63,21 @@ int main(int argc, char *argv[]) {
       }
 
       const char *name = av_get_pix_fmt_name(codec_context->pix_fmt);
-      printf("format: %s - width: %d - height: %d - linesize: %d\n", name,
-             frame->width, frame->height, frame->linesize[0]);
+      printf("format: %s - width: %d - height: %d - linesize: %d\n", name, frame->width,
+             frame->height, frame->linesize[0]);
 
       AVFrame *output_frame = av_frame_alloc();
-      struct SwsContext *sws_context = sws_getContext(
-          frame->width, frame->height, frame->format, width, height,
-          AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
+      struct SwsContext *sws_context =
+          sws_getContext(frame->width, frame->height, frame->format, width, height,
+                         AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
 
       sws_scale_frame(sws_context, output_frame, frame);
 
       sws_freeContext(sws_context);
 
       glClear(GL_COLOR_BUFFER_BIT);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-                   GL_UNSIGNED_BYTE, output_frame->data[0]);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+                   output_frame->data[0]);
 
       glClear(GL_COLOR_BUFFER_BIT);
 
