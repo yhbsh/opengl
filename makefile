@@ -1,7 +1,7 @@
 all: main rectangle triangle ppm
 
 main: main.c
-	cc -O3 main.c -o main -lglfw -lglew -lglut -lx264 -framework opengl
+	cc -O3 main.c -o main -lsdl2
 
 rectangle: rectangle.c
 	cc -O3 rectangle.c -o rectangle -lglfw -lglew -framework opengl

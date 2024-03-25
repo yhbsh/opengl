@@ -1,127 +1,65 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <x264.h>
+#include "SDL2/SDL_stdinc.h"
+#include <SDL2/SDL.h>
 
-#define INBUF_SIZE 4096
-
-static void display(GLFWwindow *window, GLuint tex_handle, int width, int height)
+int main()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
-  glBindTexture(GL_TEXTURE_2D, tex_handle);
-  glBegin(GL_QUADS);
-  glTexCoord2f(0.0f, 1.0f);
-  glVertex2f(-1.0f, -1.0f);
-  glTexCoord2f(1.0f, 1.0f);
-  glVertex2f(1.0f, -1.0f);
-  glTexCoord2f(1.0f, 0.0f);
-  glVertex2f(1.0f, 1.0f);
-  glTexCoord2f(0.0f, 0.0f);
-  glVertex2f(-1.0f, 1.0f);
-  glEnd();
-  glfwSwapBuffers(window);
-}
+  SDL_Window *window = NULL;
+  SDL_Surface *surface = NULL;
+  int width = 640;
+  int height = 480;
 
-int main(int argc, char **argv)
-{
-  if (argc != 2)
+  // Initialize SDL
+  if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
-    fprintf(stderr, "Usage: %s <input file>\n", argv[0]);
-    return -1;
+    printf("SDL initialization failed: %s\n", SDL_GetError());
+    return 1;
   }
 
-  FILE *infile = fopen(argv[1], "rb");
-  if (!infile)
+  // Create a window
+  window = SDL_CreateWindow("Pixel Buffer Example", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+  if (window == NULL)
   {
-    fprintf(stderr, "Could not open input file.\n");
-    return -1;
+    printf("Window creation failed: %s\n", SDL_GetError());
+    return 1;
   }
 
-  GLFWwindow *window;
-  if (!glfwInit())
+  // Create a surface (pixel buffer)
+  surface = SDL_GetWindowSurface(window);
+
+  // Fill the pixel buffer with a gradient pattern
+  SDL_LockSurface(surface);
+  Uint32 *pixels = (Uint32 *)surface->pixels;
+  for (int y = 0; y < height; y++)
   {
-    fprintf(stderr, "Could not initialize GLFW.\n");
-    return -1;
-  }
-
-  window = glfwCreateWindow(640, 480, "x264 OpenGL Video Player", NULL, NULL);
-  if (!window)
-  {
-    fprintf(stderr, "Could not create GLFW window.\n");
-    glfwTerminate();
-    return -1;
-  }
-
-  glfwMakeContextCurrent(window);
-
-  if (glewInit() != GLEW_OK)
-  {
-    fprintf(stderr, "Could not initialize GLEW.\n");
-    glfwTerminate();
-    return -1;
-  }
-
-  x264_picture_t pic_in, pic_out;
-  x264_param_t param;
-  x264_t *encoder;
-  x264_nal_t *nals;
-  int num_nals, frame_size, i_frame = 0;
-  int width, height;
-  char buf[INBUF_SIZE];
-
-  x264_param_default(&param);
-  param.i_width = 640;
-  param.i_height = 480;
-  param.i_csp = X264_CSP_I420;
-  param.i_log_level = X264_LOG_NONE;
-  param.b_repeat_headers = 1;
-  encoder = x264_encoder_open(&param);
-
-  x264_picture_alloc(&pic_in, param.i_csp, param.i_width, param.i_height);
-  width = param.i_width;
-  height = param.i_height;
-
-  GLuint tex_handle;
-  glGenTextures(1, &tex_handle);
-  glBindTexture(GL_TEXTURE_2D, tex_handle);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-
-  while (!glfwWindowShouldClose(window))
-  {
-    while (fgets(buf, INBUF_SIZE, infile))
+    for (int x = 0; x < width; x++)
     {
-      if (!strncmp(buf, "FRAME", 5))
-      {
-        fread(&frame_size, 1, 4, infile);
-        fread(pic_in.img.plane[0], 1, frame_size, infile);
-        x264_encoder_encode(encoder, &nals, &num_nals, &pic_in, &pic_out);
+      Uint8 red = (Uint8)(((float)x / width) * 255);
+      Uint8 green = (Uint8)(((float)y / height) * 255);
+      Uint8 blue = (Uint8)(((float)(x + y) / (width + height)) * 255);
+      pixels[y * width + x] = SDL_MapRGB(surface->format, red, green, blue);
+    }
+  }
+  SDL_UnlockSurface(surface);
 
-        for (int i = 0; i < num_nals; i++)
-        {
-          if (nals[i].i_type == NAL_SLICE)
-          {
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pic_out.img.plane[0]);
-            display(window, tex_handle, width, height);
-            i_frame++;
-            break;
-          }
-        }
+  // Update the window with the pixel buffer
+  SDL_UpdateWindowSurface(window);
+
+  SDL_bool exit = SDL_FALSE;
+  SDL_Event eventData;
+  while (!exit)
+  {
+    while (SDL_PollEvent(&eventData))
+    {
+      switch (eventData.type)
+      {
+      case SDL_QUIT:
+        exit = SDL_TRUE;
+        break;
       }
     }
-
-    glfwPollEvents();
   }
 
-  x264_encoder_close(encoder);
-  x264_picture_clean(&pic_in);
-  glDeleteTextures(1, &tex_handle);
-  glfwDestroyWindow(window);
-  glfwTerminate();
-  fclose(infile);
-
+  SDL_DestroyWindow(window);
+  SDL_Quit();
   return 0;
 }
