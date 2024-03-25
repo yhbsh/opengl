@@ -4,3 +4,5 @@ rectangle
 ppm
 frame_buffer
 .vscode
+*.dSYM
+*.mp4
