@@ -2,8 +2,8 @@ test: main
 
 all: main rectangle triangle ppm frame_buffer player texture
 
-main: src/main.cpp
-	c++ -O3 src/main.cpp -o bin/main -lglew -lglfw -framework opengl
+main: src/main.c
+	cc -O3 src/main.c -o bin/main -lavformat -lavcodec -lswscale -lavutil -lglew -lglfw -framework opengl
 	@./bin/main
 
 rectangle: src/rectangle.c
@@ -18,8 +18,9 @@ ppm: src/ppm.c
 frame_buffer: src/frame_buffer.c
 	cc -O3 src/frame_buffer.c -o bin/frame_buffer -lsdl2
 
-player: src/player.c
+player: src/player.c src/player_texture.c
 	cc -O3 src/player.c -o bin/player -lavformat -lavcodec -lavutil -lswscale -lglew -lglfw -framework opengl
+	cc -O3 src/player_texture.c -o bin/player_texture -lavformat -lavcodec -lavutil -lswscale -lglew -lglfw -framework opengl
 
 texture: src/texture.cpp
 	c++ -O3 src/texture.cpp -o bin/texture -lglew -lglfw -framework opengl
