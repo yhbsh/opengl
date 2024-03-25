@@ -19,36 +19,6 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action,
   }
 }
 
-void write_frame_to_ppm(AVFrame *frame, const char *file_path) {
-  FILE *file = fopen(file_path, "wb");
-  if (!file) {
-    fprintf(stderr, "Could not open file '%s'\n", file_path);
-    return;
-  }
-
-  int width = frame->width;
-  int height = frame->height;
-
-  // Write PPM header
-  fprintf(file, "P6\n%d %d\n255\n", width, height);
-
-  // Write pixel data
-  for (int y = 0; y < height; y++) {
-    uint8_t *row = frame->data[0] + y * frame->linesize[0];
-    for (int x = 0; x < width; x++) {
-      // Assuming AV_PIX_FMT_RGBA pixel format
-      uint8_t r = row[x * 4 + 0];
-      uint8_t g = row[x * 4 + 1];
-      uint8_t b = row[x * 4 + 2];
-      fwrite(&r, 1, 1, file);
-      fwrite(&g, 1, 1, file);
-      fwrite(&b, 1, 1, file);
-    }
-  }
-
-  fclose(file);
-}
-
 int main() {
   int ret;
 
