@@ -1,6 +1,6 @@
 test: main
 
-all: main rectangle triangle ppm frame_buffer player
+all: main rectangle triangle ppm frame_buffer player texture
 
 main: src/main.cpp
 	c++ -O3 src/main.cpp -o bin/main -lglew -lglfw -framework opengl
@@ -20,3 +20,6 @@ frame_buffer: src/frame_buffer.c
 
 player: src/player.c
 	cc -O3 src/player.c -o bin/player -lavformat -lavcodec -lavutil -lswscale -lglew -lglfw -framework opengl
+
+texture: src/texture.cpp
+	c++ -O3 src/texture.cpp -o bin/texture -lglew -lglfw -framework opengl
