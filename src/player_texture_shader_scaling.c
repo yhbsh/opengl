@@ -2,11 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
-#include <libavutil/avutil.h>
-#include <libavutil/imgutils.h>
-#include <libswscale/swscale.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 const char *vs =
     "#version 410\n"
