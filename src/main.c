@@ -37,7 +37,7 @@ const char *fs =
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
-    fprintf(stderr, "[USAGE]: ./main [url]");
+    fprintf(stderr, "[USAGE]: ./main [url]\n");
     return 1;
   }
 
