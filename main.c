@@ -71,7 +71,7 @@ int main(void) {
   while (!glfwWindowShouldClose(w)) {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
 
     glfwSwapBuffers(w);
     glfwPollEvents();
