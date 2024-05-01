@@ -73,7 +73,7 @@ int main() {
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        time += 0.01f;
+        time += 0.05f;
     }
 
     glDeleteTextures(1, &texture);
