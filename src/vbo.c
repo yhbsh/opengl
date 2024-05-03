@@ -15,7 +15,7 @@ const char *frag_source =
     "void main() {\n"
     "    vec2 uv = gl_FragCoord.xy / vec2(800.0, 600.0);\n"
     "    float pattern = sin(uv.x * 10.0 + time * 10) * sin(uv.y * 10.0 + time * 5);\n"
-    "    vec3 color = vec3(pattern, pattern * 1.0, 0.0);\n"
+    "    vec3 color = vec3(pattern, pattern * 1.0, 0.5);\n"
     "    gl_FragColor = vec4(color, 1.0);\n"
     "}\n";
 
