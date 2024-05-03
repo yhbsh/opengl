@@ -45,13 +45,14 @@ int main(void) {
     float vertices[] = {
         -0.5f, -0.5f, 0.0f, 1.0f,
          0.5f, -0.5f, 0.0f, 1.0f,
-         0.0f,  0.5f, 0.0f, 1.0f,
+         0.5f,  0.5f, 0.0f, 1.0f,
+        -0.5f,  0.5f, 0.0f, 1.0f,
     };
 
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), vertices, GL_STATIC_DRAW);
 
 
     GLuint position_attr = glGetAttribLocation(prog, "position");
@@ -68,7 +69,7 @@ int main(void) {
         glUniform1f(time_loc, time);
 
         glClear(GL_COLOR_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_QUADS, 0, 4);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
