@@ -1,14 +1,14 @@
 #define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
 #include <OpenGL/gl.h>
-#include <stdio.h>
 #include <math.h>
+#include <stdio.h>
 
 void printOpenGLInfo() {
-    const GLubyte* renderer = glGetString(GL_RENDERER);
-    const GLubyte* vendor = glGetString(GL_VENDOR);
-    const GLubyte* version = glGetString(GL_VERSION);
-    const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+    const GLubyte *renderer = glGetString(GL_RENDERER);
+    const GLubyte *vendor = glGetString(GL_VENDOR);
+    const GLubyte *version = glGetString(GL_VERSION);
+    const GLubyte *glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
 
     printf("OpenGL Renderer: %s\n", renderer);
     printf("OpenGL Vendor: %s\n", vendor);
@@ -17,7 +17,7 @@ void printOpenGLInfo() {
 }
 
 int main() {
-    GLFWwindow* window;
+    GLFWwindow *window;
     const int width = 800;
     const int height = 600;
     unsigned char color_buffer[width * height * 3];
@@ -62,10 +62,14 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, texture);
 
         glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex2f(-1.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex2f(1.0f, -1.0f);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex2f(1.0f, 1.0f);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex2f(-1.0f, 1.0f);
         glEnd();
 
         glDisable(GL_TEXTURE_2D);

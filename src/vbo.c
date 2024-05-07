@@ -1,23 +1,21 @@
 #define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl.h>
 #include <GLFW/glfw3.h>
+#include <OpenGL/gl.h>
 
-const char *vert_source =
-    "#version 120\n"
-    "attribute vec4 position;\n"
-    "void main() {\n"
-    "    gl_Position = position;\n"
-    "}\n";
+const char *vert_source = "#version 120\n"
+                          "attribute vec4 position;\n"
+                          "void main() {\n"
+                          "    gl_Position = position;\n"
+                          "}\n";
 
-const char *frag_source =
-    "#version 120\n"
-    "uniform float time;\n"
-    "void main() {\n"
-    "    vec2 uv = gl_FragCoord.xy / vec2(800.0, 600.0);\n"
-    "    float pattern = sin(uv.x * 10.0 + time * 10) * sin(uv.y * 10.0 + time * 5);\n"
-    "    vec3 color = vec3(pattern, pattern * 1.0, 0.5);\n"
-    "    gl_FragColor = vec4(color, 1.0);\n"
-    "}\n";
+const char *frag_source = "#version 120\n"
+                          "uniform float time;\n"
+                          "void main() {\n"
+                          "    vec2 uv = gl_FragCoord.xy / vec2(800.0, 600.0);\n"
+                          "    float pattern = sin(uv.x * 10.0 + time * 10) * sin(uv.y * 10.0 + time * 5);\n"
+                          "    vec3 color = vec3(pattern, pattern * 1.0, 0.5);\n"
+                          "    gl_FragColor = vec4(color, 1.0);\n"
+                          "}\n";
 
 int main(void) {
     glfwInit();
@@ -43,17 +41,13 @@ int main(void) {
     glDeleteShader(frag);
 
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, 1.0f,
-         0.5f, -0.5f, 0.0f, 1.0f,
-         0.5f,  0.5f, 0.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, -0.5f, 0.5f, 0.0f, 1.0f,
     };
 
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), vertices, GL_STATIC_DRAW);
-
 
     GLuint position_attr = glGetAttribLocation(prog, "position");
     glEnableVertexAttribArray(position_attr);
