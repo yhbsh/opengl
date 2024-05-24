@@ -1,20 +1,14 @@
 #define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
-#include <OpenGL/GL.h>
+#include <OpenGL/gl.h>
+
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libavutil/imgutils.h>
 #include <libswscale/swscale.h>
+
 #include <stdio.h>
 #include <stdlib.h>
-
-static void error_callback(int error, const char *description) { fprintf(stderr, "[ERROR]: code: %d - error: %s\n", error, description); }
-
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-}
 
 int main(int argc, char *argv[]) {
     int ret;
@@ -24,20 +18,19 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    const int width = 960;
+    const int width  = 960;
     const int height = 540;
-    glfwSetErrorCallback(error_callback);
     glfwInit();
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     GLFWwindow *w = glfwCreateWindow(width, height, "Video", NULL, NULL);
     glfwMakeContextCurrent(w);
-    glfwSetKeyCallback(w, key_callback);
 
     printf("version = %s\n", glGetString(GL_VERSION));
 
     AVFormatContext *format_context = NULL;
+
     ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
     if (ret < 0) {
         fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
@@ -50,9 +43,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int vs = -1;
+    int       vs     = -1;
     AVStream *stream = NULL;
-    for (int i = 0; i < format_context->nb_streams; i++) {
+    for (size_t i = 0; i < format_context->nb_streams; i++) {
         stream = format_context->streams[i];
         if (stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
             vs = i;
@@ -65,7 +58,7 @@ int main(int argc, char *argv[]) {
     }
 
     enum AVCodecID codec_id = stream->codecpar->codec_id;
-    const AVCodec *codec = avcodec_find_decoder(codec_id);
+    const AVCodec *codec    = avcodec_find_decoder(codec_id);
     if (codec == NULL) {
         fprintf(stderr, "[ERROR]: not codec found\n");
         return 1;
@@ -123,19 +116,18 @@ int main(int argc, char *argv[]) {
             const char *name = av_get_pix_fmt_name(frame->format);
             printf("format: %s - width: %d - height: %d - linesize: %d\n", name, frame->width, frame->height, frame->linesize[0]);
 
-            AVFrame *output_frame = av_frame_alloc();
-            struct SwsContext *sws_context = sws_getContext(frame->width, frame->height, frame->format, width, height, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
-
+            AVFrame           *output_frame = av_frame_alloc();
+            struct SwsContext *sws_context  = sws_getContext(frame->width, frame->height, frame->format, width, height, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
             sws_scale_frame(sws_context, output_frame, frame);
 
             sws_freeContext(sws_context);
 
-            uint8_t *src_data = output_frame->data[0];
-            int src_stride = output_frame->linesize[0];
-            int dst_stride = output_frame->linesize[0];
+            uint8_t *src_data   = output_frame->data[0];
+            int      src_stride = output_frame->linesize[0];
+            int      dst_stride = output_frame->linesize[0];
 
-            int buffer_size = output_frame->linesize[0] * output_frame->height;
-            uint8_t *flipped_data = (uint8_t *)malloc(buffer_size);
+            int      buffer_size  = output_frame->linesize[0] * output_frame->height;
+            uint8_t *flipped_data = (uint8_t *) malloc(buffer_size);
             for (int y = 0; y < output_frame->height; ++y) {
                 memcpy(flipped_data + (output_frame->height - 1 - y) * dst_stride, src_data + y * src_stride, src_stride);
             }

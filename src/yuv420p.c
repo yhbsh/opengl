@@ -70,9 +70,9 @@ int main() {
     glUseProgram(shaderProgram);
 
     // Generate YUV420p buffer
-    int width = 640;
-    int height = 480;
-    unsigned char *yuvBuffer = (unsigned char *)malloc(width * height * 3 / 2);
+    int            width     = 640;
+    int            height    = 480;
+    unsigned char *yuvBuffer = (unsigned char *) malloc(width * height * 3 / 2);
     // Fill the YUV buffer with test data (e.g., color gradient)
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -81,7 +81,7 @@ int main() {
     }
     for (int i = 0; i < height / 2; i++) {
         for (int j = 0; j < width / 2; j++) {
-            yuvBuffer[width * height + i * width / 2 + j] = (i + j) % 256;                      // U
+            yuvBuffer[width * height + i * width / 2 + j]                      = (i + j) % 256; // U
             yuvBuffer[width * height + width * height / 4 + i * width / 2 + j] = (i + j) % 256; // V
         }
     }

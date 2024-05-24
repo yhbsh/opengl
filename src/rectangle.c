@@ -1,21 +1,11 @@
 #define GL_SILENCE_DEPRECATION
-
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 
-static void error_callback(int error, const char *description) { fprintf(stderr, "[ERROR]: code: %d - error: %s\n", error, description); }
-
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-}
-
 int main(void) {
-    glfwSetErrorCallback(error_callback);
     glfwInit();
 
     glfwWindowHint(GLFW_SAMPLES, 4);
@@ -26,17 +16,10 @@ int main(void) {
 
     GLFWwindow *w = glfwCreateWindow(600, 600, "Rotating Rectangle", NULL, NULL);
     glfwMakeContextCurrent(w);
-    glfwSetKeyCallback(w, key_callback);
-
-    glewExperimental = GL_TRUE;
-    GLenum error = glewInit();
-    if (GLEW_OK != error) {
-        fprintf(stderr, "[ERROR]: %s\n", glewGetErrorString(error));
-        return 1;
-    }
 
     const GLubyte *renderer = glGetString(GL_RENDERER);
-    const GLubyte *version = glGetString(GL_VERSION);
+    const GLubyte *version  = glGetString(GL_VERSION);
+
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
 
@@ -88,14 +71,14 @@ int main(void) {
     glUseProgram(program);
 
     GLint rotation_loc = glGetUniformLocation(program, "rotation");
-    GLint in_col_loc = glGetUniformLocation(program, "in_colour");
+    GLint in_col_loc   = glGetUniformLocation(program, "in_colour");
 
     while (!glfwWindowShouldClose(w)) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glViewport(0, 0, 600, 600);
 
-        float angle = (float)glfwGetTime();
+        float angle = (float) glfwGetTime();
         glUniform1f(rotation_loc, angle);
         glUniform4f(in_col_loc, angle / 10, angle / 2, angle / 2, 1.0f);
 

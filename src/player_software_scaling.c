@@ -14,8 +14,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int ret;
-    const int width = 1920;
+    int       ret;
+    const int width  = 1920;
     const int height = 1080;
 
     glfwInit();
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     glEnable(GL_MULTISAMPLE); // Enable multisampling
 
     AVFormatContext *format_context = NULL;
-    ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
+    ret                             = avformat_open_input(&format_context, argv[1], NULL, NULL);
     if (ret < 0) {
         fprintf(stderr, "[ERROR]: %s\n", av_err2str(ret));
         return 1;
@@ -40,9 +40,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int vs = -1;
+    int       vs     = -1;
     AVStream *stream = NULL;
-    for (int i = 0; i < format_context->nb_streams; i++) {
+    for (size_t i = 0; i < format_context->nb_streams; i++) {
         stream = format_context->streams[i];
         if (stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
             vs = i;
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     }
 
     enum AVCodecID codec_id = stream->codecpar->codec_id;
-    const AVCodec *codec = avcodec_find_decoder(codec_id);
+    const AVCodec *codec    = avcodec_find_decoder(codec_id);
     if (codec == NULL) {
         fprintf(stderr, "[ERROR]: not codec found\n");
         return 1;
@@ -122,8 +122,8 @@ int main(int argc, char *argv[]) {
             const char *name = av_get_pix_fmt_name(codec_context->pix_fmt);
             printf("format: %s - width: %d - height: %d - linesize: %d\n", name, frame->width, frame->height, frame->linesize[0]);
 
-            AVFrame *output_frame = av_frame_alloc();
-            struct SwsContext *sws_context = sws_getContext(frame->width, frame->height, frame->format, width, height, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
+            AVFrame           *output_frame = av_frame_alloc();
+            struct SwsContext *sws_context  = sws_getContext(frame->width, frame->height, frame->format, width, height, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
 
             sws_scale_frame(sws_context, output_frame, frame);
 

@@ -40,9 +40,7 @@ int main(void) {
     glDeleteShader(vert);
     glDeleteShader(frag);
 
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, -0.5f, 0.5f, 0.0f, 1.0f,
-    };
+    float vertices[] = {-0.5f, -0.5f, 0.0f, 1.0f, 0.5f, -0.5f, 0.0f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, -0.5f, 0.5f, 0.0f, 1.0f};
 
     GLuint vbo;
     glGenBuffers(1, &vbo);
@@ -56,10 +54,7 @@ int main(void) {
     GLuint time_loc = glGetUniformLocation(prog, "time");
 
     while (!glfwWindowShouldClose(window)) {
-        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-        }
-        float time = (float)glfwGetTime();
+        float time = (float) glfwGetTime();
         glUniform1f(time_loc, time);
 
         glClear(GL_COLOR_BUFFER_BIT);

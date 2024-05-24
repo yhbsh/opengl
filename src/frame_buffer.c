@@ -3,8 +3,8 @@
 int main() {
     SDL_Window  *window  = NULL;
     SDL_Surface *surface = NULL;
-    int          width   = 640;
-    int          height  = 480;
+    size_t       width   = 640;
+    size_t       height  = 480;
 
     SDL_Init(SDL_INIT_VIDEO);
     window  = SDL_CreateWindow("Pixel Buffer Example", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);

@@ -5,9 +5,9 @@
 #include <stdio.h>
 
 void printOpenGLInfo() {
-    const GLubyte *renderer = glGetString(GL_RENDERER);
-    const GLubyte *vendor = glGetString(GL_VENDOR);
-    const GLubyte *version = glGetString(GL_VERSION);
+    const GLubyte *renderer    = glGetString(GL_RENDERER);
+    const GLubyte *vendor      = glGetString(GL_VENDOR);
+    const GLubyte *version     = glGetString(GL_VERSION);
     const GLubyte *glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
 
     printf("OpenGL Renderer: %s\n", renderer);
@@ -17,9 +17,9 @@ void printOpenGLInfo() {
 }
 
 int main() {
-    GLFWwindow *window;
-    const int width = 800;
-    const int height = 600;
+    GLFWwindow   *window;
+    const int     width  = 800;
+    const int     height = 600;
     unsigned char color_buffer[width * height * 3];
 
     glfwInit();
@@ -28,9 +28,9 @@ int main() {
 
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            int index = (y * width + x) * 3;
-            color_buffer[index] = (unsigned char)((255 * x) / width);
-            color_buffer[index + 1] = (unsigned char)((255 * y) / height);
+            int index               = (y * width + x) * 3;
+            color_buffer[index]     = (unsigned char) ((255 * x) / width);
+            color_buffer[index + 1] = (unsigned char) ((255 * y) / height);
             color_buffer[index + 2] = 0;
         }
     }
@@ -48,10 +48,10 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int index = (y * width + x) * 3;
-                color_buffer[index] = (unsigned char)(127.5 * (1.0 + sin(x * 0.01f + time)));
-                color_buffer[index + 1] = (unsigned char)(127.5 * (1.0 + sin(y * 0.01f + time)));
-                color_buffer[index + 2] = (unsigned char)(127.5 * (1.0 + sin((x + y) * 0.01f + time)));
+                int index               = (y * width + x) * 3;
+                color_buffer[index]     = (unsigned char) (127.5 * (1.0 + sin(x * 0.01f + time)));
+                color_buffer[index + 1] = (unsigned char) (127.5 * (1.0 + sin(y * 0.01f + time)));
+                color_buffer[index + 2] = (unsigned char) (127.5 * (1.0 + sin((x + y) * 0.01f + time)));
             }
         }
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, color_buffer);

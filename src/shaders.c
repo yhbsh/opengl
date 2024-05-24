@@ -15,7 +15,7 @@ const char *fs = "#version 120\n"
                  "}\n";
 
 int main() {
-    const int width = 800;
+    const int width  = 800;
     const int height = 600;
 
     glfwInit();

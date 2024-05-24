@@ -3,16 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int width, height;
+int            width, height;
 unsigned char *image = NULL;
 
-void display() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glFlush();
-}
-
-void readPPM(const char *filename) {
+void read_ppm(const char *filename) {
     FILE *file = fopen(filename, "rb");
     if (file == NULL) {
         printf("Error opening file: %s\n", filename);
@@ -34,7 +28,7 @@ void readPPM(const char *filename) {
         exit(1);
     }
 
-    image = (unsigned char *)malloc(width * height * 3);
+    image = (unsigned char *) malloc(width * height * 3);
     fread(image, width * height * 3, 1, file);
     fclose(file);
 }
@@ -42,40 +36,26 @@ void readPPM(const char *filename) {
 int main(int argc, char **argv) {
     if (argc != 2) {
         printf("Usage: %s <ppm_file>\n", argv[0]);
-        exit(1);
+        return 1;
     }
 
-    readPPM(argv[1]);
+    read_ppm(argv[1]);
 
-    if (!glfwInit()) {
-        printf("Failed to initialize GLFW.\n");
-        exit(1);
-    }
-
+    glfwInit();
     GLFWwindow *window = glfwCreateWindow(width, height, "PPM Viewer", NULL, NULL);
-    if (!window) {
-        printf("Failed to create GLFW window.\n");
-        glfwTerminate();
-        exit(1);
-    }
-
     glfwMakeContextCurrent(window);
-
-    if (glewInit() != GLEW_OK) {
-        printf("Failed to initialize GLEW.\n");
-        glfwTerminate();
-        exit(1);
-    }
-
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     while (!glfwWindowShouldClose(window)) {
-        display();
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glFlush();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     glfwTerminate();
     free(image);
+
     return 0;
 }

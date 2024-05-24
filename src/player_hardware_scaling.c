@@ -1,6 +1,6 @@
 #define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl3.h>
 #include <GLFW/glfw3.h>
+#include <OpenGL/gl3.h>
 
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
@@ -40,18 +40,18 @@ int main(int argc, char *argv[]) {
     }
 
     AVFormatContext *format_context = NULL;
-    int ret = avformat_open_input(&format_context, argv[1], NULL, NULL);
-    ret = avformat_find_stream_info(format_context, NULL);
-    const AVStream *stream = format_context->streams[1];
-    enum AVCodecID codec_id = stream->codecpar->codec_id;
-    const AVCodec *codec = avcodec_find_decoder(codec_id);
-    AVCodecContext *codec_context = avcodec_alloc_context3(codec);
-    ret = avcodec_parameters_to_context(codec_context, stream->codecpar);
-    ret = avcodec_open2(codec_context, codec, NULL);
-    AVFrame *frame = av_frame_alloc();
+    int              ret            = avformat_open_input(&format_context, argv[1], NULL, NULL);
+    ret                             = avformat_find_stream_info(format_context, NULL);
+    const AVStream *stream          = format_context->streams[1];
+    enum AVCodecID  codec_id        = stream->codecpar->codec_id;
+    const AVCodec  *codec           = avcodec_find_decoder(codec_id);
+    AVCodecContext *codec_context   = avcodec_alloc_context3(codec);
+    ret                             = avcodec_parameters_to_context(codec_context, stream->codecpar);
+    ret                             = avcodec_open2(codec_context, codec, NULL);
+    AVFrame *frame                  = av_frame_alloc();
     AVPacket packet;
 
-    const int width = 960;
+    const int width  = 960;
     const int height = 540;
 
     glfwInit();
@@ -64,9 +64,9 @@ int main(int argc, char *argv[]) {
     GLFWwindow *window = glfwCreateWindow(width, height, "Video", NULL, NULL);
     glfwMakeContextCurrent(window);
 
-    const GLubyte *renderer = glGetString(GL_RENDERER);
-    const GLubyte *vendor = glGetString(GL_VENDOR);
-    const GLubyte *version = glGetString(GL_VERSION);
+    const GLubyte *renderer    = glGetString(GL_RENDERER);
+    const GLubyte *vendor      = glGetString(GL_VENDOR);
+    const GLubyte *version     = glGetString(GL_VERSION);
     const GLubyte *glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
     printf("Renderer: %s\nVendor: %s\nVersion: %s\nGLSL: %s\n", renderer, vendor, version, glslVersion);
 
@@ -93,10 +93,22 @@ int main(int argc, char *argv[]) {
 
     GLfloat vertices[] = {
         // positions    // texture coords
-        -1.0,  1.0,     0.0, 0.0,
-        -1.0, -1.0,     0.0, 1.0,
-         1.0,  1.0,     1.0, 0.0, 
-         1.0, -1.0,     1.0, 1.0,
+        -1.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        -1.0,
+        0.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        -1.0,
+        1.0,
+        1.0,
     };
 
     GLuint vao, vbo;
@@ -109,11 +121,11 @@ int main(int argc, char *argv[]) {
 
     GLuint positionAttrib = glGetAttribLocation(prog, "position");
     glEnableVertexAttribArray(positionAttrib);
-    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void *)0);
+    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void *) 0);
 
     GLuint texCoordAttrib = glGetAttribLocation(prog, "texCoord");
     glEnableVertexAttribArray(texCoordAttrib);
-    glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid *)(2 * sizeof(GLfloat)));
+    glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid *) (2 * sizeof(GLfloat)));
 
     glUniform1i(glGetUniformLocation(prog, "textureY"), 0);
     glUniform1i(glGetUniformLocation(prog, "textureU"), 1);
