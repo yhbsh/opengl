@@ -1,5 +1,6 @@
-#include <GLFW/glfw3.h>
+#define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl3.h>
+#include <GLFW/glfw3.h>
 
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
