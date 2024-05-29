@@ -1,6 +1,5 @@
 #define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
-#include <OpenGL/gl.h>
 
 const char *vert_source = "#version 120\n"
                           "attribute vec4 position;\n"

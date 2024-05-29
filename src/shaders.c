@@ -1,5 +1,6 @@
-#include <GL/glew.h>
+#define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
+
 #include <stdio.h>
 
 const char *vs = "#version 120\n"
@@ -21,7 +22,6 @@ int main() {
     glfwInit();
     GLFWwindow *window = glfwCreateWindow(width, height, "Textured Quad", NULL, NULL);
     glfwMakeContextCurrent(window);
-    glewInit();
 
     GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vs, NULL);

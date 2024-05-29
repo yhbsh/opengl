@@ -1,10 +1,9 @@
 #define GL_SILENCE_DEPRECATION
-#include <OpenGL/gl.h>
 #include <GLFW/glfw3.h>
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <time.h>
 
 #define GRID_WIDTH 50
