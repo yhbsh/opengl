@@ -1,7 +1,7 @@
 #define GL_SILENCE_DEPRECATION
 #include <GL/glew.h>
-#include <OpenGL/gl.h>
 #include <GLFW/glfw3.h>
+#include <OpenGL/gl.h>
 
 #include <math.h>
 
@@ -19,8 +19,8 @@ int main(void) {
     glTranslatef(0.0f, 0.0f, -3.0f);
 
     while (!glfwWindowShouldClose(window)) {
-        float time = glfwGetTime();
-        float bounceAngle = fabs(sinf(time * 2.0f)) * 180.0f;
+        float time           = glfwGetTime();
+        float bounceAngle    = fabs(sinf(time * 2.0f)) * 180.0f;
         float bounceDistance = fabs(sinf(time * 2.0f)) * 2.0f - 1.0f;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -29,41 +29,41 @@ int main(void) {
         glRotatef(bounceAngle, 1.0f, 1.0f, 1.0f);
 
         glBegin(GL_QUADS);
-            glColor3f(1.0f, 0.0f, 0.0f);
-            glVertex3f(-1.0f, -1.0f,  1.0f);
-            glVertex3f( 1.0f, -1.0f,  1.0f);
-            glVertex3f( 1.0f,  1.0f,  1.0f);
-            glVertex3f(-1.0f,  1.0f,  1.0f);
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(-1.0f, -1.0f, 1.0f);
+        glVertex3f(1.0f, -1.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, 1.0f);
+        glVertex3f(-1.0f, 1.0f, 1.0f);
 
-            glColor3f(0.0f, 1.0f, 0.0f);
-            glVertex3f(-1.0f, -1.0f, -1.0f);
-            glVertex3f(-1.0f,  1.0f, -1.0f);
-            glVertex3f( 1.0f,  1.0f, -1.0f);
-            glVertex3f( 1.0f, -1.0f, -1.0f);
+        glColor3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(-1.0f, -1.0f, -1.0f);
+        glVertex3f(-1.0f, 1.0f, -1.0f);
+        glVertex3f(1.0f, 1.0f, -1.0f);
+        glVertex3f(1.0f, -1.0f, -1.0f);
 
-            glColor3f(0.0f, 0.0f, 1.0f);
-            glVertex3f(-1.0f,  1.0f, -1.0f);
-            glVertex3f(-1.0f,  1.0f,  1.0f);
-            glVertex3f( 1.0f,  1.0f,  1.0f);
-            glVertex3f( 1.0f,  1.0f, -1.0f);
+        glColor3f(0.0f, 0.0f, 1.0f);
+        glVertex3f(-1.0f, 1.0f, -1.0f);
+        glVertex3f(-1.0f, 1.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, -1.0f);
 
-            glColor3f(1.0f, 1.0f, 0.0f);
-            glVertex3f(-1.0f, -1.0f, -1.0f);
-            glVertex3f( 1.0f, -1.0f, -1.0f);
-            glVertex3f( 1.0f, -1.0f,  1.0f);
-            glVertex3f(-1.0f, -1.0f,  1.0f);
+        glColor3f(1.0f, 1.0f, 0.0f);
+        glVertex3f(-1.0f, -1.0f, -1.0f);
+        glVertex3f(1.0f, -1.0f, -1.0f);
+        glVertex3f(1.0f, -1.0f, 1.0f);
+        glVertex3f(-1.0f, -1.0f, 1.0f);
 
-            glColor3f(1.0f, 0.0f, 1.0f);
-            glVertex3f( 1.0f, -1.0f, -1.0f);
-            glVertex3f( 1.0f,  1.0f, -1.0f);
-            glVertex3f( 1.0f,  1.0f,  1.0f);
-            glVertex3f( 1.0f, -1.0f,  1.0f);
+        glColor3f(1.0f, 0.0f, 1.0f);
+        glVertex3f(1.0f, -1.0f, -1.0f);
+        glVertex3f(1.0f, 1.0f, -1.0f);
+        glVertex3f(1.0f, 1.0f, 1.0f);
+        glVertex3f(1.0f, -1.0f, 1.0f);
 
-            glColor3f(0.0f, 1.0f, 1.0f);
-            glVertex3f(-1.0f, -1.0f, -1.0f);
-            glVertex3f(-1.0f, -1.0f,  1.0f);
-            glVertex3f(-1.0f,   1.0f,  1.0f);
-            glVertex3f(-1.0f,   1.0f, -1.0f);
+        glColor3f(0.0f, 1.0f, 1.0f);
+        glVertex3f(-1.0f, -1.0f, -1.0f);
+        glVertex3f(-1.0f, -1.0f, 1.0f);
+        glVertex3f(-1.0f, 1.0f, 1.0f);
+        glVertex3f(-1.0f, 1.0f, -1.0f);
         glEnd();
 
         glfwSwapBuffers(window);

@@ -1,5 +1,6 @@
 #define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl3.h>
+
 #include <GLFW/glfw3.h>
 
 #include <libavcodec/avcodec.h>
@@ -39,17 +40,18 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    AVFormatContext *format_context = NULL;
-    int              ret            = avformat_open_input(&format_context, argv[1], NULL, NULL);
-    ret                             = avformat_find_stream_info(format_context, NULL);
-    const AVStream *stream          = format_context->streams[1];
-    enum AVCodecID  codec_id        = stream->codecpar->codec_id;
-    const AVCodec  *codec           = avcodec_find_decoder(codec_id);
-    AVCodecContext *codec_context   = avcodec_alloc_context3(codec);
-    ret                             = avcodec_parameters_to_context(codec_context, stream->codecpar);
-    ret                             = avcodec_open2(codec_context, codec, NULL);
-    AVFrame *frame                  = av_frame_alloc();
-    AVPacket packet;
+    int              ret;
+    AVFormatContext *in_ctx = NULL;
+    ret                     = avformat_open_input(&in_ctx, argv[1], NULL, NULL);
+    ret                     = avformat_find_stream_info(in_ctx, NULL);
+    const AVCodec  *c       = NULL;
+    int             vs      = av_find_best_stream(in_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, &c, 0);
+    const AVStream *s       = in_ctx->streams[vs];
+    AVCodecContext *cc      = avcodec_alloc_context3(c);
+    ret                     = avcodec_parameters_to_context(cc, s->codecpar);
+    ret                     = avcodec_open2(cc, c, NULL);
+    AVFrame  *f             = av_frame_alloc();
+    AVPacket *p             = av_packet_alloc();
 
     const int width  = 960;
     const int height = 540;
@@ -59,10 +61,13 @@ int main(int argc, char *argv[]) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+    glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
     GLFWwindow *window = glfwCreateWindow(width, height, "Video", NULL, NULL);
     glfwMakeContextCurrent(window);
+    glfwSwapInterval(0);
 
     const GLubyte *renderer    = glGetString(GL_RENDERER);
     const GLubyte *vendor      = glGetString(GL_VENDOR);
@@ -91,24 +96,12 @@ int main(int argc, char *argv[]) {
     glGenTextures(1, &textureV);
     glGenTextures(1, &textureU);
 
+    // clang-format off
     GLfloat vertices[] = {
-        // positions    // texture coords
-        -1.0,
-        1.0,
-        0.0,
-        0.0,
-        -1.0,
-        -1.0,
-        0.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        0.0,
-        1.0,
-        -1.0,
-        1.0,
-        1.0,
+        -1.0, +1.0, +0.0, +0.0,
+        -1.0, -1.0, +0.0, +1.0,
+        +1.0, +1.0, +1.0, +0.0,
+        +1.0, -1.0, +1.0, +1.0,
     };
 
     GLuint vao, vbo;
@@ -132,14 +125,14 @@ int main(int argc, char *argv[]) {
     glUniform1i(glGetUniformLocation(prog, "textureV"), 2);
 
     while (!glfwWindowShouldClose(window)) {
-        ret = av_read_frame(format_context, &packet);
-        if (packet.stream_index != stream->index) {
+        ret = av_read_frame(in_ctx, p);
+        if (p->stream_index != s->index) {
             continue;
         }
 
-        ret = avcodec_send_packet(codec_context, &packet);
+        ret = avcodec_send_packet(cc, p);
         while (ret >= 0) {
-            ret = avcodec_receive_frame(codec_context, frame);
+            ret = avcodec_receive_frame(cc, f);
             if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
                 break;
             }
@@ -149,19 +142,19 @@ int main(int argc, char *argv[]) {
 
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, textureY);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, frame->width, frame->height, 0, GL_RED, GL_UNSIGNED_BYTE, frame->data[0]);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, f->width, f->height, 0, GL_RED, GL_UNSIGNED_BYTE, f->data[0]);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, textureU);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, frame->width / 2, frame->height / 2, 0, GL_RED, GL_UNSIGNED_BYTE, frame->data[1]);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, f->width / 2, f->height / 2, 0, GL_RED, GL_UNSIGNED_BYTE, f->data[1]);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             glActiveTexture(GL_TEXTURE2);
             glBindTexture(GL_TEXTURE_2D, textureV);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, frame->width / 2, frame->height / 2, 0, GL_RED, GL_UNSIGNED_BYTE, frame->data[2]);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, f->width / 2, f->height / 2, 0, GL_RED, GL_UNSIGNED_BYTE, f->data[2]);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -171,9 +164,13 @@ int main(int argc, char *argv[]) {
             glfwPollEvents();
         }
 
-        av_packet_unref(&packet);
+        av_packet_unref(p);
     }
 
+    av_packet_free(&p);
+    av_frame_free(&f);
+    avcodec_free_context(&cc);
+    avformat_close_input(&in_ctx);
     glfwDestroyWindow(window);
     glfwTerminate();
 
