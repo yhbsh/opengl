@@ -1,0 +1,302 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/cube.o",
+      "src/cube.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/cube.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/cube.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/frame_buffer.o",
+      "src/frame_buffer.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/frame_buffer.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/frame_buffer.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/game_of_life.o",
+      "src/game_of_life.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/game_of_life.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/game_of_life.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/main.o",
+      "src/main.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/main.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/player_cpu.o",
+      "src/player_cpu.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/player_cpu.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/player_cpu.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/player_gpu.o",
+      "src/player_gpu.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/player_gpu.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/player_gpu.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/player_naive.o",
+      "src/player_naive.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/player_naive.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/player_naive.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/ppm.o",
+      "src/ppm.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/ppm.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/ppm.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/rectangle.o",
+      "src/rectangle.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/rectangle.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/rectangle.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/shaders.o",
+      "src/shaders.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/shaders.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/shaders.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/texture.o",
+      "src/texture.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/texture.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/texture.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/triangle.o",
+      "src/triangle.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/triangle.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/triangle.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/uv.o",
+      "src/uv.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/uv.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/uv.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/vbo.o",
+      "src/vbo.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/vbo.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/vbo.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/clang",
+      "-Wall",
+      "-Wextra",
+      "-D_THREAD_SAFE",
+      "-I/Users/home/code/include",
+      "-I/opt/homebrew/Cellar/glew/2.2.0_1/include",
+      "-I/opt/homebrew/Cellar/glfw/3.4/include",
+      "-I/opt/homebrew/include",
+      "-I/opt/homebrew/include/SDL2",
+      "-c",
+      "-o",
+      "bin/yuv420p.o",
+      "src/yuv420p.c"
+    ],
+    "directory": "/Users/home/dev/c/opengl_samples",
+    "file": "/Users/home/dev/c/opengl_samples/src/yuv420p.c",
+    "output": "/Users/home/dev/c/opengl_samples/bin/yuv420p.o"
+  }
+]
