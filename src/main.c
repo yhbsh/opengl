@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int       ret;
+    int ret;
     const int width  = 960;
     const int height = 540;
 
@@ -61,9 +61,9 @@ int main(int argc, char *argv[]) {
     AVFormatContext *format_context = NULL;
     ret                             = avformat_open_input(&format_context, argv[1], NULL, NULL);
     ret                             = avformat_find_stream_info(format_context, NULL);
-    AVStream       *stream          = format_context->streams[1];
-    enum AVCodecID  codec_id        = stream->codecpar->codec_id;
-    const AVCodec  *codec           = avcodec_find_decoder(codec_id);
+    AVStream *stream                = format_context->streams[1];
+    enum AVCodecID codec_id         = stream->codecpar->codec_id;
+    const AVCodec *codec            = avcodec_find_decoder(codec_id);
     AVCodecContext *codec_context   = avcodec_alloc_context3(codec);
     ret                             = avcodec_parameters_to_context(codec_context, stream->codecpar);
     ret                             = avcodec_open2(codec_context, codec, NULL);
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void *) sizeof(vertices));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void *)sizeof(vertices));
     glEnableVertexAttribArray(1);
 
     while (!glfwWindowShouldClose(window)) {

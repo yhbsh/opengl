@@ -1,8 +1,8 @@
 CC          := clang
 CXX         := clang++
-CFLAGS      := -Wall -Wextra $(shell pkg-config --cflags --static glew glfw3 sdl2 libavcodec libavformat libavutil libswresample libswscale)
+CFLAGS      := -Wall -Wextra $(shell pkg-config --cflags --static glfw sdl libavcodec libavformat libavutil libswresample libswscale)
 CXXFLAGS    := $(CFLAGS)
-LDFLAGS     := $(shell pkg-config --libs --static glew glfw3 sdl2 libavcodec libavformat libavutil libswresample libswscale) -framework OpenGL
+LDFLAGS     := $(shell pkg-config --libs --static glfw sdl libavcodec libavformat libavutil libswresample libswscale) -framework OpenGL
 BIN_DIR     := bin
 SRC_DIR     := src
 SOURCES_C   := $(wildcard $(SRC_DIR)/*.c)
