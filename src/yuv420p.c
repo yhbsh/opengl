@@ -1,4 +1,3 @@
-#define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
 
 #include <GLFW/glfw3.h>
@@ -49,9 +48,9 @@ int main() {
     glLinkProgram(shaderProgram);
     glUseProgram(shaderProgram);
 
-    int            width     = 640;
-    int            height    = 480;
-    unsigned char *yuvBuffer = (unsigned char *) malloc(width * height * 3 / 2);
+    int width                = 640;
+    int height               = 480;
+    unsigned char *yuvBuffer = (unsigned char *)malloc(width * height * 3 / 2);
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             yuvBuffer[i * width + j] = (i + j) % 256;

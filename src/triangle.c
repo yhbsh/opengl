@@ -1,4 +1,3 @@
-#define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl3.h>
 
 #include <GLFW/glfw3.h>
@@ -74,7 +73,7 @@ int main(void) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        float rotation_angle = (float) glfwGetTime();
+        float rotation_angle = (float)glfwGetTime();
         glUniform1f(rotation_loc, rotation_angle);
 
         glBindVertexArray(vao);

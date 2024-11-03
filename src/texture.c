@@ -1,4 +1,3 @@
-#define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
 
 #include <math.h>
@@ -25,22 +24,22 @@ int main() {
 
     const int width  = 256;
     const int height = 256;
-    uint8_t  *data   = malloc(width * height * 3);
+    uint8_t *data    = malloc(width * height * 3);
 
     while (!glfwWindowShouldClose(window)) {
-        float time = (float) glfwGetTime();
+        float time = (float)glfwGetTime();
 
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
-                float u = (float) (x) / width;
-                float v = (float) (y) / height;
+                float u = (float)(x) / width;
+                float v = (float)(y) / height;
                 u += sin(time * 2.0f + v * 4.0f) * 0.1f;
                 v += cos(time * 3.0f + u * 2.0f) * 0.1f;
                 u = fmod(u, 1.0f);
                 v = fmod(v, 1.0f);
 
-                data[(y * width + x) * 3 + 0] = (uint8_t) (u * 255);
-                data[(y * width + x) * 3 + 1] = (uint8_t) (v * 255);
+                data[(y * width + x) * 3 + 0] = (uint8_t)(u * 255);
+                data[(y * width + x) * 3 + 1] = (uint8_t)(v * 255);
                 data[(y * width + x) * 3 + 2] = 0;
             }
         }

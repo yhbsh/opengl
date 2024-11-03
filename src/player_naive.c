@@ -1,4 +1,3 @@
-#define GL_SILENCE_DEPRECATION
 #include <OpenGL/gl.h>
 
 #include <GLFW/glfw3.h>
@@ -44,7 +43,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int       vs     = -1;
+    int vs           = -1;
     AVStream *stream = NULL;
     for (size_t i = 0; i < format_context->nb_streams; i++) {
         stream = format_context->streams[i];
@@ -117,18 +116,18 @@ int main(int argc, char *argv[]) {
             const char *name = av_get_pix_fmt_name(frame->format);
             printf("format: %s - width: %d - height: %d - linesize: %d\n", name, frame->width, frame->height, frame->linesize[0]);
 
-            AVFrame           *output_frame = av_frame_alloc();
-            struct SwsContext *sws_context  = sws_getContext(frame->width, frame->height, frame->format, width, height, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
+            AVFrame *output_frame          = av_frame_alloc();
+            struct SwsContext *sws_context = sws_getContext(frame->width, frame->height, frame->format, width, height, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
             sws_scale_frame(sws_context, output_frame, frame);
 
             sws_freeContext(sws_context);
 
-            uint8_t *src_data   = output_frame->data[0];
-            int      src_stride = output_frame->linesize[0];
-            int      dst_stride = output_frame->linesize[0];
+            uint8_t *src_data = output_frame->data[0];
+            int src_stride    = output_frame->linesize[0];
+            int dst_stride    = output_frame->linesize[0];
 
-            int      buffer_size  = output_frame->linesize[0] * output_frame->height;
-            uint8_t *flipped_data = (uint8_t *) malloc(buffer_size);
+            int buffer_size       = output_frame->linesize[0] * output_frame->height;
+            uint8_t *flipped_data = (uint8_t *)malloc(buffer_size);
             for (int y = 0; y < output_frame->height; ++y) {
                 memcpy(flipped_data + (output_frame->height - 1 - y) * dst_stride, src_data + y * src_stride, src_stride);
             }

@@ -1,4 +1,3 @@
-#define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
 
 #include <math.h>
@@ -35,7 +34,8 @@ int main(void) {
                 int live_neighbors = 0;
                 for (int i = -1; i <= 1; i++) {
                     for (int j = -1; j <= 1; j++) {
-                        if (i == 0 && j == 0) continue;
+                        if (i == 0 && j == 0)
+                            continue;
                         int nx = (x + i + GRID_WIDTH) % GRID_WIDTH;
                         int ny = (y + j + GRID_HEIGHT) % GRID_HEIGHT;
                         live_neighbors += grid[nx][ny];

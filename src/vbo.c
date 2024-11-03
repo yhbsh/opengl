@@ -1,4 +1,3 @@
-#define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
 
 const char *vert_source = "#version 120\n"
@@ -53,7 +52,7 @@ int main(void) {
     GLuint time_loc = glGetUniformLocation(prog, "time");
 
     while (!glfwWindowShouldClose(window)) {
-        float time = (float) glfwGetTime();
+        float time = (float)glfwGetTime();
         glUniform1f(time_loc, time);
 
         glClear(GL_COLOR_BUFFER_BIT);

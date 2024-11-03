@@ -1,7 +1,7 @@
 CC          := clang
 CXX         := clang++
-CFLAGS      := -Wall -Wextra $(shell pkg-config --cflags --static glfw sdl libavcodec libavformat libavutil libswresample libswscale)
-CXXFLAGS    := $(CFLAGS)
+CFLAGS      := -DGL_SILENCE_DEPRECATION -Wall -Wextra $(shell pkg-config --cflags --static glfw sdl libavcodec libavformat libavutil libswresample libswscale)
+CXXFLAGS    := $(CFLAGS) -std=c++17
 LDFLAGS     := $(shell pkg-config --libs --static glfw sdl libavcodec libavformat libavutil libswresample libswscale) -framework OpenGL
 BIN_DIR     := bin
 SRC_DIR     := src

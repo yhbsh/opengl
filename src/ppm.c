@@ -1,10 +1,9 @@
-#define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
-int            width, height;
+int width, height;
 unsigned char *image = NULL;
 
 void read_ppm(const char *filename) {
@@ -29,7 +28,7 @@ void read_ppm(const char *filename) {
         exit(1);
     }
 
-    image = (unsigned char *) malloc(width * height * 3);
+    image = (unsigned char *)malloc(width * height * 3);
     fread(image, width * height * 3, 1, file);
     fclose(file);
 }
